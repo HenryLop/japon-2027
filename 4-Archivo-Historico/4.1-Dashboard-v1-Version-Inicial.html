@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Japan · Thailand · Istanbul — Trip Command Center</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
+<style>
+:root{
+  color-scheme: light;
+  --bg:#f6f5f1; --card:#ffffff; --ink:#1c1b1a; --muted:#6b6660;
+  --line:#e7e3db; --accent:#b91c1c; --accent2:#0f766e; --gold:#b7791f;
+  --jp:#b91c1c; --th:#0f766e; --ist:#7c3aed; --col:#c2410c;
+  --shadow:0 1px 3px rgba(0,0,0,.06),0 8px 24px rgba(0,0,0,.05);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  line-height:1.5;-webkit-font-smoothing:antialiased;}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 60px}
+.hero{background:linear-gradient(135deg,#1c1b1a 0%,#2d2a26 100%);color:#f6f5f1;
+  border-radius:18px;padding:30px 30px 26px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-40px;top:-40px;width:220px;height:220px;
+  background:radial-gradient(circle,rgba(185,28,28,.35),transparent 70%)}
+.hero h1{margin:0 0 4px;font-size:26px;letter-spacing:-.4px;font-weight:700}
+.hero .sub{color:#c8c2b8;font-size:14px;margin-bottom:22px}
+.count-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;position:relative;z-index:2}
+.count{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
+  border-radius:12px;padding:14px 12px}
+.count .n{font-size:30px;font-weight:700;line-height:1}
+.count .l{font-size:11px;color:#c8c2b8;text-transform:uppercase;letter-spacing:.6px;margin-top:6px}
+.count .d{font-size:11px;color:#8f8a82;margin-top:2px}
+.section{margin-top:34px}
+.section h2{font-size:15px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);
+  font-weight:600;margin:0 0 14px;display:flex;align-items:center;gap:8px}
+.section h2::before{content:"";width:22px;height:2px;background:var(--accent);border-radius:2px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:var(--shadow)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+
+/* route timeline */
+.route{display:flex;flex-wrap:wrap;gap:8px;align-items:stretch}
+.leg{flex:1 1 0;min-width:120px;background:var(--card);border:1px solid var(--line);
+  border-radius:12px;padding:12px 12px 14px;position:relative}
+.leg .tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;
+  padding:2px 8px;border-radius:20px;display:inline-block;margin-bottom:8px;color:#fff}
+.leg .city{font-weight:700;font-size:15px}
+.leg .meta{font-size:12px;color:var(--muted);margin-top:3px}
+.leg .nights{font-size:12px;color:var(--ink);font-weight:600;margin-top:8px}
+.dot-jp{background:var(--jp)} .dot-th{background:var(--th)} .dot-ist{background:var(--ist)} .dot-col{background:var(--col)}
+
+/* itinerary */
+.itin{display:flex;flex-direction:column;gap:10px}
+.iseg{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--line)}
+.iseg:last-child{border-bottom:none}
+.iseg .bar{width:4px;align-self:stretch;border-radius:4px;flex:0 0 4px}
+.iseg .body{flex:1}
+.iseg .h{font-weight:700;font-size:15px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.iseg .n{font-size:12px;color:var(--muted);font-weight:600;white-space:nowrap}
+.iseg .desc{font-size:13px;color:var(--muted);margin-top:4px}
+.pill{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;
+  padding:2px 7px;border-radius:20px;margin-right:5px;display:inline-block;margin-top:6px}
+.p-splurge{background:#fdf2e9;color:var(--gold)} .p-party{background:#fdeaea;color:var(--accent)}
+.p-nature{background:#e8f5f2;color:var(--accent2)} .p-city{background:#eef0ff;color:var(--ist)}
+
+/* tickets */
+.tkt{border-left:4px solid var(--accent);padding:12px 14px;background:#fafafa;border-radius:0 10px 10px 0;margin-bottom:10px}
+.tkt:last-child{margin-bottom:0}
+.tkt .t{font-weight:700;font-size:14px}
+.tkt .r{font-size:12.5px;color:var(--muted);margin-top:3px}
+.tkt .b{font-size:11px;color:var(--accent2);font-weight:600;margin-top:5px}
+
+/* payment calendar */
+.pay{display:flex;flex-direction:column;gap:0}
+.pev{display:flex;gap:14px;position:relative;padding-bottom:18px}
+.pev:last-child{padding-bottom:0}
+.pev .marker{flex:0 0 auto;width:14px;display:flex;flex-direction:column;align-items:center}
+.pev .dot{width:14px;height:14px;border-radius:50%;background:var(--accent);border:3px solid #fff;box-shadow:0 0 0 1px var(--line);z-index:2}
+.pev .line{width:2px;flex:1;background:var(--line);margin-top:-2px}
+.pev:last-child .line{display:none}
+.pev .pc{flex:1;background:#fafafa;border:1px solid var(--line);border-radius:10px;padding:10px 13px}
+.pev .pd{font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px}
+.pev .pt{font-weight:600;font-size:14px;margin-top:2px}
+.pev .pn{font-size:12.5px;color:var(--muted);margin-top:3px}
+.pev.done .dot{background:var(--accent2)}
+.pev.done .pd{color:var(--accent2)}
+
+/* savings */
+.saverow{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.inputs label{display:block;font-size:12px;color:var(--muted);font-weight:600;margin:12px 0 5px}
+.inputs input{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:9px;font-size:14px;background:#fff;color:var(--ink)}
+.inputs input:focus{outline:2px solid var(--accent);outline-offset:0;border-color:transparent}
+.readout{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.rline{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;padding:8px 0;border-bottom:1px dashed var(--line)}
+.rline b{font-size:16px}
+.rline.good b{color:var(--accent2)} .rline.bad b{color:var(--accent)}
+.bar-track{height:12px;background:var(--line);border-radius:8px;overflow:hidden;margin-top:6px}
+.bar-fill{height:100%;background:linear-gradient(90deg,var(--accent2),#34d399);border-radius:8px;transition:width .3s}
+.chartbox{height:230px;position:relative}
+
+/* checklist */
+.chk{list-style:none;margin:0;padding:0}
+.chk li{display:flex;gap:11px;padding:11px 0;border-bottom:1px solid var(--line);font-size:14px}
+.chk li:last-child{border-bottom:none}
+.chk .ic{flex:0 0 22px;height:22px;border-radius:6px;background:#fdeaea;color:var(--accent);
+  display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}
+.chk .ct{flex:1}
+.chk .cd{font-size:12px;color:var(--muted);margin-top:2px}
+.chk .flag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;
+  background:#fdf2e9;color:var(--gold);padding:2px 7px;border-radius:20px;white-space:nowrap;align-self:flex-start}
+.chk .flag.hot{background:#fdeaea;color:var(--accent)}
+.foot{margin-top:36px;font-size:12px;color:var(--muted);text-align:center;line-height:1.7}
+@media(max-width:720px){
+  .count-row{grid-template-columns:1fr 1fr}
+  .grid2,.grid3,.saverow{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <h1>Japan · Thailand · Istanbul</h1>
+    <div class="sub">Oct 30 – Nov 23, 2027 &nbsp;·&nbsp; Departing Medellín &nbsp;·&nbsp; Two travelers &nbsp;·&nbsp; 25 days</div>
+    <div class="count-row">
+      <div class="count"><div class="n" id="c-dep">—</div><div class="l">Days to departure</div><div class="d">Oct 30, 2027</div></div>
+      <div class="count"><div class="n" id="c-visa">—</div><div class="l">To visa window</div><div class="d">Opens ~Aug 9, 2027</div></div>
+      <div class="count"><div class="n" id="c-tkt">—</div><div class="l">To ticket purchase</div><div class="d">Turkish · Jun 2027</div></div>
+      <div class="count"><div class="n" id="c-save">—</div><div class="l">Months saving left</div><div class="d">Until departure</div></div>
+    </div>
+  </div>
+
+  <!-- ROUTE -->
+  <div class="section">
+    <h2>The Route</h2>
+    <div class="route">
+      <div class="leg"><span class="tag dot-col">Origin</span><div class="city">Medellín → Bogotá</div><div class="meta">Domestic shuttle</div><div class="nights">Oct 30</div></div>
+      <div class="leg"><span class="tag dot-ist">Stopover</span><div class="city">Istanbul</div><div class="meta">Jet-lag reset</div><div class="nights">1 night · out</div></div>
+      <div class="leg"><span class="tag dot-th">Beach/City</span><div class="city">Bangkok</div><div class="meta">Turkish → ZIPAIR</div><div class="nights">4 nights</div></div>
+      <div class="leg"><span class="tag dot-jp">Centerpiece</span><div class="city">Japan circuit</div><div class="meta">Tokyo·Hakone·Kyoto·Osaka</div><div class="nights">13 nights</div></div>
+      <div class="leg"><span class="tag dot-ist">Return</span><div class="city">Istanbul</div><div class="meta">TK Stopover night</div><div class="nights">2 nights</div></div>
+      <div class="leg"><span class="tag dot-col">Home</span><div class="city">Bogotá → Medellín</div><div class="meta">Domestic shuttle</div><div class="nights">Nov 23</div></div>
+    </div>
+  </div>
+
+  <!-- ITINERARY -->
+  <div class="section">
+    <h2>Itinerary by Segment</h2>
+    <div class="card">
+      <div class="itin">
+        <div class="iseg"><div class="bar" style="background:var(--ist)"></div><div class="body">
+          <div class="h"><span>Istanbul — outbound stopover</span><span class="n">1 night</span></div>
+          <div class="desc">Break the ultra-long-haul, reset the body clock before Asia. A genuine destination, not just a layover.</div>
+          <span class="pill p-city">City</span></div></div>
+        <div class="iseg"><div class="bar" style="background:var(--th)"></div><div class="body">
+          <div class="h"><span>Bangkok</span><span class="n">4 nights · 5 days</span></div>
+          <div class="desc">High-energy warm-up: rooftop cocktail scene, late-night neighborhoods, then a slower recovery day before the ZIPAIR overnight to Narita.</div>
+          <span class="pill p-party">Party</span><span class="pill p-city">City</span></div></div>
+        <div class="iseg"><div class="bar" style="background:var(--jp)"></div><div class="body">
+          <div class="h"><span>Tokyo</span><span class="n">part of 13</span></div>
+          <div class="desc">Dense city time — dining, nightlife, neighborhoods. The high-intensity anchor of the Japan leg.</div>
+          <span class="pill p-city">City</span><span class="pill p-party">Party</span></div></div>
+        <div class="iseg"><div class="bar" style="background:var(--jp)"></div><div class="body">
+          <div class="h"><span>Hakone — ryokan</span><span class="n">the splurge</span></div>
+          <div class="desc">Deliberate luxury anchor: onsen ryokan, kaiseki dinner, restorative pause between two intense stretches.</div>
+          <span class="pill p-splurge">Splurge</span><span class="pill p-nature">Nature</span></div></div>
+        <div class="iseg"><div class="bar" style="background:var(--jp)"></div><div class="body">
+          <div class="h"><span>Kyoto — peak momiji</span><span class="n">timed</span></div>
+          <div class="desc">Arriving during peak autumn foliage — the reason the whole calendar is timed to early-mid November. Books earliest.</div>
+          <span class="pill p-nature">Nature</span><span class="pill p-splurge">Timed</span></div></div>
+        <div class="iseg"><div class="bar" style="background:var(--jp)"></div><div class="body">
+          <div class="h"><span>Osaka</span><span class="n">close of Japan</span></div>
+          <div class="desc">Food-and-nightlife finale before the return routing through Istanbul.</div>
+          <span class="pill p-party">Party</span><span class="pill p-city">City</span></div></div>
+        <div class="iseg"><div class="bar" style="background:var(--ist)"></div><div class="body">
+          <div class="h"><span>Istanbul — return</span><span class="n">2 nights</span></div>
+          <div class="desc">First night via the Turkish Airlines Stopover program (free hotel). Highest-value stopover of the trip — a real landing before home.</div>
+          <span class="pill p-city">City</span><span class="pill p-splurge">Free hotel</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TICKETS + PAYMENT -->
+  <div class="section">
+    <div class="grid2">
+      <div>
+        <h2>Ticket Architecture</h2>
+        <div class="card">
+          <div class="tkt"><div class="t">Turkish Airlines — multi-city</div><div class="r">BOG→IST→BKK &nbsp;//&nbsp; TYO→IST→BOG, booked as one PNR</div><div class="b">Purchase: June 2027</div></div>
+          <div class="tkt" style="border-color:var(--th)"><div class="t">ZIPAIR — Bangkok → Narita</div><div class="r">Overnight, purchased separately from the TK ticket</div><div class="b" style="color:var(--th)">Purchase: July 2027</div></div>
+          <div class="tkt" style="border-color:var(--col)"><div class="t">Avianca / LATAM — domestic</div><div class="r">MDE ↔ BOG shuttles, both directions</div><div class="b" style="color:var(--col)">Book closer to travel</div></div>
+        </div>
+      </div>
+      <div>
+        <h2>Payment Calendar</h2>
+        <div class="card">
+          <div class="pay">
+            <div class="pev" id="pv-jul26"><div class="marker"><div class="dot"></div><div class="line"></div></div><div class="pc"><div class="pd">Jul 2026</div><div class="pt">Henry begins saving</div><div class="pn">Fixed monthly contribution starts.</div></div></div>
+            <div class="pev" id="pv-oct26"><div class="marker"><div class="dot"></div><div class="line"></div></div><div class="pc"><div class="pd">Oct 2026</div><div class="pt">Partner begins saving</div><div class="pn">Smaller monthly contribution joins the fund.</div></div></div>
+            <div class="pev" id="pv-jun27"><div class="marker"><div class="dot"></div><div class="line"></div></div><div class="pc"><div class="pd">Jun 2027</div><div class="pt">Turkish multi-city ticket</div><div class="pn">Largest single flight payment.</div></div></div>
+            <div class="pev" id="pv-jul27"><div class="marker"><div class="dot"></div><div class="line"></div></div><div class="pc"><div class="pd">Jul 2027</div><div class="pt">ZIPAIR BKK–Narita</div><div class="pn">Purchased separately.</div></div></div>
+            <div class="pev" id="pv-aug27"><div class="marker"><div class="dot"></div><div class="line"></div></div><div class="pc"><div class="pd">Aug 2027</div><div class="pt">Visas + priority hotels</div><div class="pn">Kyoto & Hakone booked first (peak foliage demand).</div></div></div>
+            <div class="pev" id="pv-dep"><div class="marker"><div class="dot"></div><div class="line"></div></div><div class="pc"><div class="pd">Oct 30, 2027</div><div class="pt">Departure — fund target ~39.8M COP</div><div class="pn">Covers flights, ryokan, hotels, nightlife/dining, shinkansen, visas, insurance + buffer.</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SAVINGS -->
+  <div class="section">
+    <h2>Savings Projector</h2>
+    <div class="card">
+      <div class="saverow">
+        <div class="inputs">
+          <label>Henry — monthly (COP, from Jul 2026)</label>
+          <input type="number" id="in-h" value="1900000" step="50000">
+          <label>Partner — monthly (COP, from Oct 2026)</label>
+          <input type="number" id="in-p" value="720000" step="50000">
+          <label>Already saved so far (COP, optional)</label>
+          <input type="number" id="in-now" value="0" step="100000">
+          <label>Target fund at departure (COP)</label>
+          <input type="number" id="in-target" value="39800000" step="100000">
+          <div class="readout">
+            <div class="rline" id="r-proj"><span>Projected fund at departure</span><b>—</b></div>
+            <div class="rline" id="r-gap"><span>vs target</span><b>—</b></div>
+          </div>
+          <div class="bar-track"><div class="bar-fill" id="bar" style="width:0%"></div></div>
+        </div>
+        <div>
+          <div class="chartbox"><canvas id="chart"></canvas></div>
+          <div style="font-size:11.5px;color:var(--muted);margin-top:8px">
+            Green line = cumulative savings. Dashed = target. Red markers = major payment months (ticket, ZIPAIR, visas/hotels). Adjust the inputs — everything recalculates live.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VISA / ACTIONS -->
+  <div class="section">
+    <h2>Critical Path — Visa & Deadlines</h2>
+    <div class="card">
+      <ul class="chk">
+        <li><span class="ic">!</span><div class="ct"><b>Japan visa application opens ~Aug 9, 2027</b><div class="cd">Three months before the Nov 7 entry. In-person filing in Bogotá, min. 13 business-day processing, no expedited option.</div></div><span class="flag hot">Hardest constraint</span></li>
+        <li><span class="ic">✓</span><div class="ct"><b>Prepare day-by-day itinerary + flight docs</b><div class="cd">Required for the visa file — must be complete before the August filing window.</div></div><span class="flag">Before Aug</span></li>
+        <li><span class="ic">✓</span><div class="ct"><b>Buy Turkish multi-city ticket — June 2027</b><div class="cd">Provides the confirmed flight reservations the visa application needs.</div></div><span class="flag">Jun 2027</span></li>
+        <li><span class="ic">✓</span><div class="ct"><b>Buy ZIPAIR BKK–Narita — July 2027</b><div class="cd">Completes the routing documentation before filing.</div></div><span class="flag">Jul 2027</span></li>
+        <li><span class="ic">✓</span><div class="ct"><b>Reserve Kyoto & Hakone first — August 2027</b><div class="cd">Peak momiji demand fills these earliest; book ahead of all other lodging.</div></div><span class="flag hot">Peak foliage</span></li>
+        <li><span class="ic">i</span><div class="ct"><b>Verify Colombian-passport routing risk for any change</b><div class="cd">Immigration risk shaped the whole route — re-check before altering any leg. Don't assume a new routing is safe.</div></div><span class="flag">Ongoing</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="foot">
+    Trip Command Center · built from your locked itinerary · countdowns update each time you open this.<br>
+    Route, dates, and ticket structure are fixed. Savings inputs are editable planning estimates — adjust them to match your real monthly numbers.
+  </div>
+</div>
+
+<script>
+(function(){
+  var today = new Date(); today.setHours(0,0,0,0);
+  function daysTo(y,m,d){ var t=new Date(y,m,d); return Math.round((t-today)/86400000); }
+  function monthsBetween(a,b){ return (b.getFullYear()-a.getFullYear())*12 + (b.getMonth()-a.getMonth()); }
+  function fmt(n){ return n.toLocaleString('en-US'); }
+  function fmtM(n){ return (n/1e6).toFixed(1)+'M'; }
+
+  // countdowns
+  var dep=daysTo(2027,9,30), visa=daysTo(2027,7,9), tkt=daysTo(2027,5,1);
+  document.getElementById('c-dep').textContent = dep>0?dep:'✓';
+  document.getElementById('c-visa').textContent = visa>0?visa:'✓';
+  document.getElementById('c-tkt').textContent = tkt>0?tkt:'✓';
+  var depDate=new Date(2027,9,30);
+  var monthsLeft=Math.max(0,monthsBetween(today,depDate));
+  document.getElementById('c-save').textContent = monthsLeft;
+
+  // mark past payment events done
+  [['pv-jul26',2026,6],['pv-oct26',2026,9],['pv-jun27',2027,5],['pv-jul27',2027,6],['pv-aug27',2027,7]].forEach(function(e){
+    var d=new Date(e[1],e[2],1);
+    if(d<=today){ var el=document.getElementById(e[0]); if(el) el.classList.add('done'); }
+  });
+
+  // savings projection
+  var chart;
+  function build(){
+    var h=+document.getElementById('in-h').value||0;
+    var p=+document.getElementById('in-p').value||0;
+    var now=+document.getElementById('in-now').value||0;
+    var target=+document.getElementById('in-target').value||0;
+
+    var start=new Date(2026,6,1);        // Jul 2026 Henry starts
+    var pStart=new Date(2026,9,1);       // Oct 2026 partner starts
+    var end=new Date(2027,9,1);          // count contributions through Oct 2027
+    var labels=[], data=[], pointColors=[], pointRadius=[];
+    var cum=now;
+    var payMonths={ '2027-5':1,'2027-6':1,'2027-7':1 }; // Jun/Jul/Aug 2027 (0-idx month)
+    var cur=new Date(start.getFullYear(),start.getMonth(),1);
+    while(cur<=end){
+      if(cur>=start) cum+=h;
+      if(cur>=pStart) cum+=p;
+      labels.push(cur.toLocaleDateString('en-US',{month:'short',year:'2-digit'}));
+      data.push(Math.round(cum));
+      var key=cur.getFullYear()+'-'+cur.getMonth();
+      var pay=payMonths[key];
+      pointColors.push(pay?'#b91c1c':'#0f766e');
+      pointRadius.push(pay?5:0);
+      cur.setMonth(cur.getMonth()+1);
+    }
+    var projected=data[data.length-1];
+    var gap=projected-target;
+
+    var rp=document.getElementById('r-proj'); rp.querySelector('b').textContent=fmt(projected)+' COP';
+    var rg=document.getElementById('r-gap');
+    rg.className='rline '+(gap>=0?'good':'bad');
+    rg.querySelector('b').textContent=(gap>=0?'+':'')+fmt(gap)+' COP';
+    var pct=target>0?Math.min(100,Math.max(0,projected/target*100)):0;
+    document.getElementById('bar').style.width=pct.toFixed(0)+'%';
+
+    var targetLine=labels.map(function(){return target;});
+    if(chart){ chart.data.labels=labels; chart.data.datasets[0].data=data;
+      chart.data.datasets[0].pointBackgroundColor=pointColors;
+      chart.data.datasets[0].pointRadius=pointRadius;
+      chart.data.datasets[1].data=targetLine; chart.update(); return; }
+
+    chart=new Chart(document.getElementById('chart'),{
+      type:'line',
+      data:{labels:labels,datasets:[
+        {label:'Cumulative savings',data:data,borderColor:'#0f766e',
+         backgroundColor:'rgba(15,118,110,.10)',fill:true,tension:.25,
+         pointBackgroundColor:pointColors,pointRadius:pointRadius,pointHoverRadius:6,borderWidth:2.5},
+        {label:'Target',data:targetLine,borderColor:'#b91c1c',borderDash:[6,5],
+         pointRadius:0,fill:false,borderWidth:1.5}
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},
+          tooltip:{callbacks:{label:function(c){return c.dataset.label+': '+fmt(c.parsed.y)+' COP';}}}},
+        scales:{y:{ticks:{callback:function(v){return fmtM(v);}},grid:{color:'#eee'}},
+          x:{ticks:{maxRotation:0,autoSkip:true,maxTicksLimit:8},grid:{display:false}}}}
+    });
+  }
+  ['in-h','in-p','in-now','in-target'].forEach(function(id){
+    document.getElementById(id).addEventListener('input',build);
+  });
+  build();
+})();
+</script>
+</body>
+</html>
