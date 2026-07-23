@@ -3,604 +3,648 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Documento Maestro · Japón 2027</title>
+<title>Japón 2027</title>
 <style>
 :root{
-  color-scheme: light;
-  --bg:#f5f3ee; --card:#ffffff; --ink:#1b1a18; --muted:#6c665e; --line:#e6e1d8;
-  --jp:#b91c1c; --ist:#7c3aed; --col:#c2410c; --th:#0f766e;
-  --green:#63B77C; --turq:#2FA6A0; --amber:#E3A431; --red:#D8442E;
-  --shadow:0 1px 3px rgba(0,0,0,.06),0 10px 30px rgba(0,0,0,.05);
+  --bg:#f7f8fa;--sidebar:#f0f1f5;--surface:#fff;--border:#e3e6ec;
+  --text:#1c1f26;--text-2:#6b7385;--text-3:#9ba3b2;
+  --accent:#c05535;--accent-bg:rgba(192,85,53,.08);
+  --hover:rgba(0,0,0,.04);
+  --green:#63B77C;--turq:#2FA6A0;--amber:#E3A431;--red:#D8442E;--purple:#7c3aed;
 }
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.5}
-.wrap{max-width:1000px;margin:0 auto;padding:0 16px 70px}
-header.masthead{padding:26px 4px 14px}
-header.masthead .kanji{color:var(--jp);font-weight:800;letter-spacing:2px;font-size:12px;text-transform:uppercase}
-header.masthead h1{margin:2px 0 3px;font-size:25px;letter-spacing:-.4px}
-header.masthead .sub{color:var(--muted);font-size:13.5px}
-/* tabs */
-.tabs{position:sticky;top:0;z-index:50;background:var(--bg);padding:8px 0 6px;
-  display:flex;gap:6px;overflow-x:auto;border-bottom:1px solid var(--line);-webkit-overflow-scrolling:touch}
-.tabs button{flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--muted);
-  font-size:12.5px;font-weight:600;padding:8px 13px;border-radius:20px;cursor:pointer;white-space:nowrap;transition:.15s}
-.tabs button:hover{border-color:#cfc8bc}
-.tabs button.active{background:var(--ink);color:#fff;border-color:var(--ink)}
-.tabs button .num{opacity:.55;margin-right:5px;font-weight:700}
-.panel{display:none;padding-top:22px;animation:fade .25s ease}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#111318;--sidebar:#16181f;--surface:#1e2028;--border:#2a2e38;
+  --text:#d5dae5;--text-2:#8890a2;--text-3:#5a6072;
+  --accent:#d86a45;--accent-bg:rgba(216,106,69,.1);
+  --hover:rgba(255,255,255,.04);
+}}
+:root[data-theme="dark"]{
+  --bg:#111318;--sidebar:#16181f;--surface:#1e2028;--border:#2a2e38;
+  --text:#d5dae5;--text-2:#8890a2;--text-3:#5a6072;
+  --accent:#d86a45;--accent-bg:rgba(216,106,69,.1);
+  --hover:rgba(255,255,255,.04);
+}
+:root[data-theme="light"]{
+  --bg:#f7f8fa;--sidebar:#f0f1f5;--surface:#fff;--border:#e3e6ec;
+  --text:#1c1f26;--text-2:#6b7385;--text-3:#9ba3b2;
+  --accent:#c05535;--accent-bg:rgba(192,85,53,.08);
+  --hover:rgba(0,0,0,.04);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.55;display:flex;min-height:100vh}
+/* ─── SIDEBAR ─── */
+.sidebar{position:fixed;top:0;left:0;width:240px;height:100vh;background:var(--sidebar);
+  border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;
+  transition:transform .2s ease}
+.sb-header{padding:20px 16px 16px;border-bottom:1px solid var(--border)}
+.sb-kanji{font-size:11px;font-weight:700;letter-spacing:3px;color:var(--accent);text-transform:uppercase}
+.sb-title{font-size:15px;font-weight:700;margin:2px 0 1px}
+.sb-meta{font-size:12px;color:var(--text-2)}
+.sb-nav{flex:1;overflow-y:auto;padding:12px 8px}
+.sb-group{font-size:10.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
+  color:var(--text-3);padding:14px 8px 5px}
+.sb-item{display:flex;align-items:center;width:100%;border:none;background:none;
+  color:var(--text-2);font:inherit;font-size:13.5px;padding:7px 10px;border-radius:5px;
+  cursor:pointer;text-align:left;transition:all .1s;position:relative}
+.sb-item:hover{background:var(--hover);color:var(--text)}
+.sb-item.active{background:var(--accent-bg);color:var(--accent);font-weight:600}
+.sb-item.active::before{content:"";position:absolute;left:0;top:6px;bottom:6px;width:2px;
+  background:var(--accent);border-radius:2px}
+.sb-item:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.sb-footer{padding:12px 16px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:8px}
+.sb-stat{display:flex;align-items:baseline;gap:6px;font-size:12px;color:var(--text-2)}
+.sb-stat-n{font-weight:800;font-variant-numeric:tabular-nums;color:var(--text);font-size:14px}
+.sb-stat-n.ok{color:var(--green)}
+.sb-stat-n.warn{color:var(--amber)}
+.theme-btn{border:1px solid var(--border);background:var(--surface);color:var(--text-2);
+  width:32px;height:32px;border-radius:6px;cursor:pointer;font-size:14px;
+  display:flex;align-items:center;justify-content:center;transition:.15s;align-self:flex-start}
+.theme-btn:hover{border-color:var(--text-3);color:var(--text)}
+/* ─── MOBILE BAR ─── */
+.mobile-bar{display:none;position:fixed;top:0;left:0;right:0;height:48px;background:var(--sidebar);
+  border-bottom:1px solid var(--border);z-index:90;align-items:center;padding:0 12px;gap:12px}
+.menu-btn{border:none;background:none;color:var(--text);cursor:pointer;padding:6px;
+  display:flex;flex-direction:column;gap:4px;width:32px}
+.menu-btn span{display:block;height:2px;background:var(--text);border-radius:1px;transition:.15s}
+.mobile-title{font-size:14px;font-weight:600}
+.backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:95}
+.backdrop.show{display:block}
+/* ─── MAIN ─── */
+.main{margin-left:240px;flex:1;min-height:100vh;padding:32px 40px 80px}
+.panel{display:none;max-width:720px;animation:fadeIn .2s ease}
 .panel.active{display:block}
-@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
-h2.sec{font-size:13px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin:0 0 14px;font-weight:700;display:flex;align-items:center;gap:8px}
-h2.sec::before{content:"";width:20px;height:2px;background:var(--jp);border-radius:2px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
-.pad{padding:18px}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.section-head{margin-bottom:24px}
+.section-head h1{font-size:18px;font-weight:700;letter-spacing:-.3px}
+.section-head p{font-size:13px;color:var(--text-2);margin-top:3px}
+/* ─── COMPONENTS ─── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:16px}
 table{width:100%;border-collapse:collapse;font-size:13px}
-th,td{text-align:left;padding:10px 10px;border-bottom:1px solid var(--line);vertical-align:top}
-th{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);font-weight:700}
+th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--text-3);
+  font-weight:700;padding:8px 10px;border-bottom:1px solid var(--border)}
+td{padding:9px 10px;border-bottom:1px solid var(--border);vertical-align:top}
 tr:last-child td{border-bottom:none}
-.mono{font-variant-numeric:tabular-nums}
-.tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;padding:2px 8px;border-radius:20px;color:#fff;display:inline-block}
-.t-jp{background:var(--jp)}.t-ist{background:var(--ist)}.t-col{background:var(--col)}.t-th{background:var(--th)}
-/* alert cards */
-.alerts{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}
-.alert{border-radius:12px;padding:13px 14px;font-size:12.5px;border:1px solid var(--line);background:var(--card)}
-.alert .at{font-weight:700;font-size:12px;margin-bottom:5px;display:flex;gap:6px;align-items:center}
-.alert.a1{border-left:4px solid var(--green)} .alert.a2{border-left:4px solid var(--amber)} .alert.a3{border-left:4px solid var(--ist)}
+.mono{font-family:Consolas,"SF Mono",Monaco,monospace;font-variant-numeric:tabular-nums}
+.tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;
+  padding:2px 7px;border-radius:4px;color:#fff;display:inline-block}
+.t-jp{background:var(--accent)}.t-col{background:#996633}.t-tbd{background:var(--text-3)}
+.t-can{background:#d32011}
+/* alerts */
+.alerts{display:grid;grid-template-columns:1fr;gap:8px;margin-top:14px}
+.alert{border-radius:6px;padding:12px 14px;font-size:13px;border:1px solid var(--border);background:var(--surface)}
+.alert-head{font-weight:700;font-size:12px;margin-bottom:4px;display:flex;gap:6px;align-items:center}
+.alert-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 /* accordion */
-.acc{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:10px;background:var(--card);box-shadow:var(--shadow)}
-.acc .head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 16px;cursor:pointer;border-left:5px solid var(--muted)}
-.acc .head:hover{background:#fafafa}
-.acc .head .ttl{font-weight:700;font-size:14.5px}
-.acc .head .meta{font-size:12px;color:var(--muted)}
-.acc .head .chev{transition:.2s;color:var(--muted);font-size:13px}
-.acc.open .head .chev{transform:rotate(90deg)}
-.acc .body{display:none;padding:2px 16px 16px;font-size:13px;color:var(--ink)}
+.acc{border:1px solid var(--border);border-radius:6px;margin-bottom:6px;overflow:hidden;background:var(--surface)}
+.acc .head{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;
+  cursor:pointer;gap:10px;transition:background .1s}
+.acc .head:hover{background:var(--hover)}
+.acc .ttl{font-weight:600;font-size:14px;display:flex;align-items:center;gap:8px}
+.acc .meta{font-size:12px;color:var(--text-2)}
+.acc .chev{transition:transform .15s;color:var(--text-3);font-size:11px;flex-shrink:0}
+.acc.open .chev{transform:rotate(90deg)}
+.acc .body{display:none;padding:2px 14px 14px;font-size:13px}
 .acc.open .body{display:block}
-.acc.c-col .head{border-left-color:var(--col)} .acc.c-ist .head{border-left-color:var(--ist)}
-.acc.c-jp .head{border-left-color:var(--jp)} .acc.c-th .head{border-left-color:var(--th)}
-.subrow{display:flex;gap:10px;padding:7px 0;border-bottom:1px dashed var(--line);font-size:12.5px}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;display:inline-block}
+.subrow{display:flex;gap:10px;padding:7px 0;border-bottom:1px dashed var(--border);font-size:13px}
 .subrow:last-child{border-bottom:none}
-.subrow b{flex:0 0 130px}
-.kv{margin:8px 0}
-.kv .k{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);font-weight:700}
+.subrow b{flex:0 0 120px;font-weight:600}
+.kv{margin:7px 0}
+.kv .k{font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--text-3);font-weight:700}
 .kv .v{font-size:13px;margin-top:2px}
-/* budget bars */
-.bud{display:flex;flex-direction:column;gap:12px}
-.bitem .top{display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px}
-.bitem .top b{font-weight:600}.bitem .rng{color:var(--muted);font-variant-numeric:tabular-nums}
-.btrack{height:14px;background:#eee7db;border-radius:8px;overflow:hidden}
-.bfill{height:100%;border-radius:8px;background:linear-gradient(90deg,var(--jp),#e06666)}
-.budtotal{margin-top:16px;padding-top:14px;border-top:2px solid var(--line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;font-size:15px;font-weight:700}
-.budtotal .ok{color:var(--green)}
+/* budget */
+.bitem{margin-bottom:12px}
+.bitem .top{display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px}
+.bitem .top b{font-weight:600}
+.bitem .rng{color:var(--text-2);font-variant-numeric:tabular-nums}
+.btrack{height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.bfill{height:100%;border-radius:3px;background:var(--accent)}
+.budtotal{margin-top:16px;padding-top:14px;border-top:1px solid var(--border);
+  display:flex;flex-direction:column;gap:4px;font-size:14px}
+.budtotal .ok{color:var(--green);font-weight:600}
 /* links */
-.linkgroup{margin-bottom:18px}
-.linkgroup h3{font-size:13px;margin:0 0 8px;color:var(--ink)}
-.lrow{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px;flex-wrap:wrap}
+.linkgroup{margin-bottom:16px}
+.linkgroup h3{font-size:13px;font-weight:700;margin:0 0 8px}
+.lrow{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);
+  font-size:13px;flex-wrap:wrap}
 .lrow:last-child{border-bottom:none}
-.lrow a{color:var(--th);text-decoration:none;font-weight:600;word-break:break-all;flex:1;min-width:200px}
+.lrow a{color:var(--accent);text-decoration:none;font-weight:600;word-break:break-all;flex:1;min-width:180px}
 .lrow a:hover{text-decoration:underline}
-.copy,.quote{border:1px solid var(--line);background:#fff;border-radius:8px;padding:4px 10px;font-size:11.5px;cursor:pointer;color:var(--muted);white-space:nowrap}
-.copy:hover{border-color:var(--th);color:var(--th)}
-.copy.done{color:var(--green);border-color:var(--green)}
-.quote{border-color:var(--jp);color:var(--jp);font-weight:600}
-.quote:hover{background:#fdeaea}
-.quote.done{color:var(--green);border-color:var(--green);background:#f4faf5}
-/* countdown */
-.cd{display:flex;align-items:center;gap:16px;border:2px solid var(--amber);border-radius:14px;padding:16px 18px;margin-bottom:20px;background:#fffdf7}
-.cd.open{border-color:var(--green);background:#f4faf5}
-.cd .big{font-size:34px;font-weight:800;line-height:1;color:var(--amber)}
-.cd.open .big{color:var(--green)}
-.cd .lbl{font-size:12.5px;color:var(--muted)}
-.cd .lbl b{color:var(--ink)}
-/* status cards */
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
-.stat .n{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums}
-.stat .l{font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);margin-top:3px}
+.pill{border:1px solid var(--border);background:var(--surface);border-radius:4px;
+  padding:3px 8px;font-size:11px;cursor:pointer;color:var(--text-2);white-space:nowrap;transition:.1s}
+.pill:hover{border-color:var(--text-3);color:var(--text)}
+.pill.done{color:var(--green);border-color:var(--green)}
+.pill.quote{border-color:var(--accent);color:var(--accent)}
+.pill.quote:hover{background:var(--accent-bg)}
+.pill.quote.done{color:var(--green);border-color:var(--green)}
+/* stats row */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:10px 12px}
+.stat .n{font-size:18px;font-weight:800;font-variant-numeric:tabular-nums}
+.stat .l{font-size:10px;text-transform:uppercase;letter-spacing:.4px;color:var(--text-3);margin-top:2px}
 /* verdict chips */
-.vchip{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.3px;padding:2px 8px;border-radius:20px;color:#fff;white-space:nowrap}
+.vchip{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.3px;
+  padding:2px 6px;border-radius:3px;color:#fff;white-space:nowrap}
 .v-green{background:var(--green)}.v-turq{background:var(--turq)}.v-amber{background:var(--amber)}.v-red{background:var(--red)}
-textarea{width:100%;min-height:90px;border:1px solid var(--line);border-radius:10px;padding:11px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;resize:vertical}
-.extractor{border:1px solid var(--jp);background:#fffaf9;border-radius:12px;padding:14px;margin-bottom:16px}
-.extractor .exhead{font-weight:700;font-size:14px;color:var(--jp);margin-bottom:4px}
-.exrow{display:flex;gap:14px;flex-wrap:wrap;margin:10px 0}
-.exrow label{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);font-weight:700;display:flex;flex-direction:column;gap:4px}
-.exrow select,.exrow input,#ex-pp,#ex-src{border:1px solid var(--line);border-radius:8px;padding:7px 9px;font-size:13px;background:#fff;color:var(--ink)}
-#ex-paste{min-height:56px;font-family:inherit;font-size:13px}
-#ex-result{margin-top:12px;font-size:13.5px;display:none}
-#ex-result.show{display:block}
-#ex-result .line1{margin-bottom:8px}
-#ex-pp{width:110px;font-variant-numeric:tabular-nums;font-weight:700}
-#ex-src{width:130px}
-.exconfirm{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:8px}
-.btn{border:1px solid var(--ink);background:var(--ink);color:#fff;border-radius:9px;padding:9px 15px;font-size:13px;font-weight:600;cursor:pointer}
-.btn.ghost{background:#fff;color:var(--ink)}
-.btn.warn{border-color:var(--red);color:var(--red);background:#fff}
+/* extractor */
+.extractor{border:1px solid var(--border);border-top:2px solid var(--accent);background:var(--surface);
+  border-radius:6px;padding:14px;margin-bottom:16px}
+.extractor .exhead{font-weight:700;font-size:14px;margin-bottom:4px}
+.exrow{display:flex;gap:12px;flex-wrap:wrap;margin:10px 0}
+.exrow label{font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--text-3);
+  font-weight:700;display:flex;flex-direction:column;gap:4px}
+.exrow select,.exrow input,#ex-pp,#ex-src{border:1px solid var(--border);border-radius:4px;
+  padding:6px 8px;font-size:13px;background:var(--surface);color:var(--text)}
+textarea{width:100%;min-height:70px;border:1px solid var(--border);border-radius:6px;
+  padding:10px;font-family:Consolas,"SF Mono",monospace;font-size:12px;resize:vertical;
+  background:var(--surface);color:var(--text)}
+.btn{border:1px solid var(--text);background:var(--text);color:var(--bg);border-radius:5px;
+  padding:7px 14px;font-size:12.5px;font-weight:600;cursor:pointer;transition:.1s}
+.btn:hover{opacity:.85}
+.btn.ghost{background:var(--surface);color:var(--text);border-color:var(--border)}
+.btn.ghost:hover{border-color:var(--text-3)}
+.btn.warn{border-color:var(--red);color:var(--red);background:var(--surface)}
 .btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .msg{font-size:12px;color:var(--amber);margin-top:8px;min-height:16px}
-.chartwrap{border:1px solid var(--line);border-radius:12px;background:var(--card);padding:10px;margin-top:16px}
+.chartwrap{border:1px solid var(--border);border-radius:6px;padding:8px;margin-top:14px;background:var(--surface)}
 svg{display:block;width:100%;height:auto}
-.rowx{border:none;background:none;color:var(--red);cursor:pointer;font-size:14px;font-weight:700}
+.rowx{border:none;background:none;color:var(--red);cursor:pointer;font-size:13px;font-weight:700}
 /* checklist */
-.chk{list-style:none;margin:0;padding:0}
-.chk li{display:flex;gap:12px;align-items:flex-start;padding:11px 4px;border-bottom:1px solid var(--line)}
+.progress{height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin:0 0 16px}
+.progress>div{height:100%;border-radius:2px;background:var(--green);width:0;transition:.3s}
+.chk{list-style:none}
+.chk li{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border)}
 .chk li:last-child{border-bottom:none}
-.chk input{margin-top:3px;width:18px;height:18px;accent-color:var(--jp);cursor:pointer;flex:0 0 auto}
+.chk input[type="checkbox"]{margin-top:3px;width:16px;height:16px;accent-color:var(--accent);cursor:pointer;flex-shrink:0}
 .chk .txt{flex:1;font-size:14px}
-.chk .txt .d{font-size:12px;color:var(--muted)}
-.chk li.done .txt{text-decoration:line-through;color:var(--muted)}
-.chk .when{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--jp);background:#fdeaea;padding:2px 8px;border-radius:20px;white-space:nowrap;align-self:flex-start;margin-top:2px}
-.chk .when.hot{background:#fbe9e5;color:var(--red)}
-.progress{height:10px;background:var(--line);border-radius:8px;overflow:hidden;margin:6px 0 18px}
-.progress > div{height:100%;background:linear-gradient(90deg,var(--green),#8fd0a3);width:0;transition:.3s}
-.note{font-size:12px;color:var(--muted);margin-top:12px;line-height:1.7}
-@media(max-width:720px){
-  .alerts{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}
-  .subrow b{flex-basis:100px}
+.chk .txt .d{font-size:12px;color:var(--text-2);margin-top:1px}
+.chk li.done .txt{text-decoration:line-through;color:var(--text-3)}
+.chk .when{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;
+  color:var(--accent);background:var(--accent-bg);padding:2px 7px;border-radius:3px;
+  white-space:nowrap;align-self:flex-start;margin-top:2px}
+.chk .when.hot{background:rgba(216,68,46,.1);color:var(--red)}
+.note{font-size:12px;color:var(--text-2);margin-top:10px;line-height:1.7}
+#ex-result{margin-top:10px;font-size:13px;display:none}
+#ex-result.show{display:block}
+.exconfirm{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:6px}
+.tbd-banner{border:1px dashed var(--amber);border-radius:6px;padding:12px 14px;
+  font-size:13px;color:var(--text-2);background:rgba(227,164,49,.05);margin-bottom:16px}
+.tbd-banner b{color:var(--amber)}
+/* ─── RESPONSIVE ─── */
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .mobile-bar{display:flex}
+  .main{margin-left:0;padding:60px 16px 80px}
+  .stats{grid-template-columns:1fr 1fr}
+  .subrow b{flex-basis:90px}
 }
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header class="masthead">
-    <div class="kanji">日本 2027 · Documento Maestro</div>
-    <h1>Japón 2027 — Panel único del viaje</h1>
-    <div class="sub">Jue 28 oct → Mar 23 nov 2027 · 27 días · Pareja · Salida Medellín · TRM 3.950 · Fondo 39,8M COP</div>
-  </header>
 
-  <nav class="tabs" id="tabs">
-    <button class="active" data-t="t1"><span class="num">1</span>Ruta &amp; Vuelos</button>
-    <button data-t="t2"><span class="num">2</span>Calendario</button>
-    <button data-t="t3"><span class="num">3</span>Ciudades</button>
-    <button data-t="t4"><span class="num">4</span>Trenes</button>
-    <button data-t="t5"><span class="num">5</span>Presupuesto</button>
-    <button data-t="t6"><span class="num">6</span>Ahorro</button>
-    <button data-t="t7"><span class="num">7</span>Vigilar Vuelos</button>
-    <button data-t="t8"><span class="num">8</span>Checklist</button>
+<header class="mobile-bar">
+  <button class="menu-btn" id="menu-btn"><span></span><span></span><span></span></button>
+  <span class="mobile-title" id="mobile-title">Ruta & Vuelos</span>
+</header>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sb-header">
+    <div class="sb-kanji">日本 · 2027</div>
+    <div class="sb-title">Japón 2027</div>
+    <div class="sb-meta">28 oct — 23 nov · 27 días · Pareja</div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-group">Planificación</div>
+    <button class="sb-item active" data-t="t1">Ruta & Vuelos</button>
+    <button class="sb-item" data-t="t2">Calendario</button>
+    <button class="sb-item" data-t="t3">Ciudades</button>
+    <div class="sb-group">Logística</div>
+    <button class="sb-item" data-t="t4">Trenes</button>
+    <button class="sb-item" data-t="t5">Presupuesto</button>
+    <button class="sb-item" data-t="t6">Plan de ahorro</button>
+    <div class="sb-group">Seguimiento</div>
+    <button class="sb-item" data-t="t7">Vigilar vuelos</button>
+    <button class="sb-item" data-t="t8">Checklist</button>
   </nav>
+  <div class="sb-footer">
+    <div class="sb-stat"><span class="sb-stat-n" id="sb-days">—</span><span>días para el despegue</span></div>
+    <div class="sb-stat"><span class="sb-stat-n ok">39,8M</span><span>fondo COP · cubierto</span></div>
+    <button class="theme-btn" id="theme-btn" aria-label="Cambiar tema">☀</button>
+  </div>
+</aside>
 
-  <!-- ===================== TAB 1 ===================== -->
-  <section class="panel active" id="t1">
-    <h2 class="sec">Ruta &amp; Vuelos — 6 segmentos</h2>
-    <div class="card pad">
-      <table>
-        <thead><tr><th>Fecha</th><th>Ruta</th><th>Operador</th><th>Horario</th><th>Duración</th><th>Tiquete</th></tr></thead>
-        <tbody>
-          <tr><td>Jue 28 oct</td><td><b>MDE→BOG</b></td><td>Avianca/LATAM</td><td class="mono">~13:00</td><td class="mono">0h45</td><td><span class="tag t-col">Doméstico</span></td></tr>
-          <tr><td>Jue 28 oct</td><td><b>BOG→IST</b></td><td>Turkish</td><td class="mono">17:00 → 17:00+1</td><td class="mono">~15h</td><td><span class="tag t-jp">Multi seg 1</span></td></tr>
-          <tr><td>Dom 31 oct</td><td><b>IST→Tokio</b></td><td>Turkish diario</td><td class="mono">noche → tarde+1</td><td class="mono">~11h30</td><td><span class="tag t-jp">Multi seg 2</span></td></tr>
-          <tr><td>Sáb 20 nov</td><td><b>Tokio→IST</b></td><td>Turkish diario</td><td class="mono">noche → mañana+1</td><td class="mono">~13h30</td><td><span class="tag t-jp">Multi seg 3</span></td></tr>
-          <tr><td>Mar 23 nov</td><td><b>IST→BOG</b></td><td>TK800</td><td class="mono">09:40 → 15:05</td><td class="mono">13h25</td><td><span class="tag t-jp">Multi seg 4</span></td></tr>
-          <tr><td>Mar 23 nov</td><td><b>BOG→MDE</b></td><td>Avianca/LATAM</td><td class="mono">~19:00</td><td class="mono">0h45</td><td><span class="tag t-col">Doméstico</span></td></tr>
-        </tbody>
+<div class="backdrop" id="backdrop"></div>
+
+<main class="main">
+
+<!-- ═══ T1: RUTA & VUELOS ═══ -->
+<section class="panel active" id="t1">
+  <div class="section-head"><h1>Ruta & Vuelos</h1><p>MDE → BOG → vía Canadá → Tokio (ida y vuelta)</p></div>
+
+  <div class="tbd-banner"><b>Tiquetes por definir.</b> La ruta va por Canadá. Aerolínea, conexiones y horarios pendientes de cotización.</div>
+
+  <div class="card" style="overflow-x:auto">
+    <table>
+      <thead><tr><th>Tramo</th><th>Ruta</th><th>Operador</th><th>Detalle</th><th>Tiquete</th></tr></thead>
+      <tbody>
+        <tr><td>Doméstico ida</td><td><b>MDE → BOG</b></td><td>Avianca / LATAM</td><td>~1h</td><td><span class="tag t-col">Doméstico</span></td></tr>
+        <tr><td>Internacional ida</td><td><b>BOG → Canadá → Tokio</b></td><td>Por definir</td><td>Conexión por YYZ o YVR</td><td><span class="tag t-tbd">TBD</span></td></tr>
+        <tr><td>Internacional vuelta</td><td><b>Tokio → Canadá → BOG</b></td><td>Por definir</td><td>Conexión por YYZ o YVR</td><td><span class="tag t-tbd">TBD</span></td></tr>
+        <tr><td>Doméstico vuelta</td><td><b>BOG → MDE</b></td><td>Avianca / LATAM</td><td>~1h</td><td><span class="tag t-col">Doméstico</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="alerts">
+    <div class="alert"><div class="alert-head"><span class="alert-dot" style="background:var(--amber)"></span>Canadá como tránsito</div>Pasajeros colombianos necesitan <b>eTA (Electronic Travel Authorization)</b> para tránsito por Canadá. Verificar requisitos vigentes al momento de la compra.</div>
+    <div class="alert"><div class="alert-head"><span class="alert-dot" style="background:var(--amber)"></span>Umbral de precio</div>Si el vuelo redondo cotiza <b>≥ USD 1.700 pp</b>, considerar <b>alternativas de ruteo</b> ese mismo día.</div>
+    <div class="alert"><div class="alert-head"><span class="alert-dot" style="background:var(--green)"></span>Opciones de aerolínea</div>Air Canada (YYZ/YVR), ANA codeshare, y combinaciones con escala en Canadá. Buscar multi-city y round trip.</div>
+  </div>
+</section>
+
+<!-- ═══ T2: CALENDARIO ═══ -->
+<section class="panel" id="t2">
+  <div class="section-head"><h1>Calendario</h1><p>27 días · Japón-puro con tránsito por Canadá</p></div>
+
+  <div class="acc open"><div class="head"><div><div class="ttl"><span class="dot" style="background:#996633"></span>Despegue</div><div class="meta">Jue 28 oct</div></div><span class="chev">▶</span></div>
+    <div class="body">El jueves es "volado" y el viernes medio día: arranca sin quemar día hábil completo. MDE → BOG, vuelo internacional vía Canadá a Tokio.</div></div>
+
+  <div class="acc"><div class="head"><div><div class="ttl"><span class="dot" style="background:var(--accent)"></span>Japón</div><div class="meta">~29 oct – 20 nov · 7 paradas</div></div><span class="chev">▶</span></div>
+    <div class="body">
+      <div class="subrow"><b>Tokio · 5n</b><span>Aterrizaje, Shibuya/Shinjuku, comida y rumba de Golden Gai a clubes.</span></div>
+      <div class="subrow"><b>Kanazawa · 2n</b><span>Kenroku-en, Higashi Chaya, mercado Omicho.</span></div>
+      <div class="subrow"><b>Osaka · 2n</b><span>Namba y Dotonbori: comida callejera y noche.</span></div>
+      <div class="subrow"><b>Hiroshima · 2n</b><span>Museo de la Paz, torii flotante de Miyajima al atardecer.</span></div>
+      <div class="subrow"><b>Kioto · 5n</b><span>Pico de momiji: Fushimi Inari al amanecer, Arashiyama, Nara.</span></div>
+      <div class="subrow"><b>Hakone · 2n</b><span>Ryokan con onsen y kaiseki. El splurge.</span></div>
+      <div class="subrow"><b>Tokio final · 1n</b><span>Última noche antes del vuelo de regreso.</span></div>
+      <div class="note" style="margin-top:8px">Las fechas exactas de llegada y salida de Japón dependen del vuelo final. ~19–23 noches disponibles según routing.</div>
+    </div></div>
+
+  <div class="acc"><div class="head"><div><div class="ttl"><span class="dot" style="background:#996633"></span>Regreso</div><div class="meta">~21–23 nov</div></div><span class="chev">▶</span></div>
+    <div class="body">Vuelo de regreso Tokio → Canadá → BOG → MDE. Llegada a Medellín mar 23 nov.</div></div>
+</section>
+
+<!-- ═══ T3: CIUDADES ═══ -->
+<section class="panel" id="t3">
+  <div class="section-head"><h1>Ciudades</h1><p>7 paradas japonesas</p></div>
+  <div id="cities"></div>
+</section>
+
+<!-- ═══ T4: TRENES ═══ -->
+<section class="panel" id="t4">
+  <div class="section-head"><h1>Trenes</h1><p>Tramos y estrategia de pase</p></div>
+  <div class="card" style="overflow-x:auto">
+    <table>
+      <thead><tr><th>Tramo</th><th>Precio (billete suelto)</th></tr></thead>
+      <tbody>
+        <tr><td>Narita → Tokio</td><td class="mono">¥2.500 – 3.100</td></tr>
+        <tr><td>Tokio → Kanazawa</td><td class="mono">~¥14.400</td></tr>
+        <tr><td>Kanazawa → Osaka</td><td class="mono">~¥8.000</td></tr>
+        <tr><td>Osaka → Hiroshima</td><td class="mono">~¥10.600</td></tr>
+        <tr><td>Hiroshima → Kioto</td><td class="mono">~¥11.300</td></tr>
+        <tr><td>Kioto → Odawara (Hakone)</td><td class="mono">~¥12.500</td></tr>
+        <tr><td>Hakone → Tokio</td><td class="mono">~¥2.500 – 3.300</td></tr>
+        <tr><td>Tokio → aeropuerto</td><td class="mono">~¥2.500 – 3.100</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="alerts">
+    <div class="alert"><div class="alert-head"><span class="alert-dot" style="background:var(--green)"></span>Billetes sueltos ganan</div>Tramos largos suman <b>~¥44.300</b>, por debajo del <b>JR Pass de 7 días (¥50.000)</b>.</div>
+    <div class="alert"><div class="alert-head"><span class="alert-dot" style="background:var(--amber)"></span>Subida del pase</div>Desde el <b>1 oct 2026</b> el JR Pass sube a <b>¥53.000 / ¥84.000</b> (7/14 días).</div>
+  </div>
+  <div class="note">La app <b>SmartEX</b> da hasta <b>30% de descuento</b> comprando shinkansen con anticipación.</div>
+</section>
+
+<!-- ═══ T5: PRESUPUESTO ═══ -->
+<section class="panel" id="t5">
+  <div class="section-head"><h1>Presupuesto</h1><p>Pareja · 27 días · USD</p></div>
+  <div class="card">
+    <div id="bud"></div>
+    <div class="budtotal">
+      <span><b>Total:</b> <span class="mono">USD 8.000 – 10.000</span> · <span class="mono">COP 31,6 – 39,5M</span></span>
+      <span class="ok">Fondo 39,8M + rendimientos · Cubierto</span>
+    </div>
+  </div>
+  <div class="note">Rango final depende de aerolínea y routing definitivo vía Canadá.</div>
+</section>
+
+<!-- ═══ T6: AHORRO ═══ -->
+<section class="panel" id="t6">
+  <div class="section-head"><h1>Plan de ahorro</h1><p>Flujo de caja</p></div>
+  <div class="card" style="overflow-x:auto">
+    <table>
+      <thead><tr><th>Momento</th><th>Movimiento</th><th>Nota</th></tr></thead>
+      <tbody>
+        <tr><td>Jul 2026 →</td><td><b>+2.000.000 / mes</b> (Henry)</td><td>Aporte fijo mensual arranca.</td></tr>
+        <tr><td>Oct 2026 →</td><td><b>+600.000 / mes</b> (ella)</td><td>Se suma el segundo aporte.</td></tr>
+        <tr><td>Nov 2026</td><td>Black Friday <span class="tag t-tbd">condicional</span></td><td>Solo si aparece tarifa con buen precio.</td></tr>
+        <tr><td>Mar 2027</td><td>Pasaportes</td><td>Vigencia y páginas en regla antes de la visa.</td></tr>
+        <tr><td>May 2027</td><td>Vacaciones por escrito</td><td>15 días hábiles confirmados.</td></tr>
+        <tr><td>Jun 2027</td><td><b>Compra vuelos internacionales</b></td><td>Mayor pago del viaje. Ruta vía Canadá.</td></tr>
+        <tr><td>Jul 2027</td><td>Shuttles MDE↔BOG</td><td>Domésticos, ambos sentidos.</td></tr>
+        <tr><td>~1 Ago 2027</td><td><b>Visa Japón + ryokan + Kioto (~4,3M)</b></td><td>Radicación y reservas de mayor demanda.</td></tr>
+        <tr><td>Sep 2027</td><td>Hoteles restantes</td><td>Resto del alojamiento.</td></tr>
+        <tr><td>Oct 2027</td><td>Trenes y divisas</td><td>SmartEX + efectivo/tarjeta.</td></tr>
+        <tr><td>28 Oct 2027</td><td><b>Despegue con ~16,5M líquidos</b></td><td>Colchón para el viaje en curso.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═══ T7: VIGILAR VUELOS ═══ -->
+<section class="panel" id="t7">
+  <div class="section-head"><h1>Vigilar vuelos</h1><p>Links, gatillos y bitácora</p></div>
+
+  <div class="tbd-banner"><b>Ruta por Canadá.</b> Los links de búsqueda apuntan a BOG → TYO con conexiones genéricas. Una vez definida la aerolínea, afinar los links.</div>
+
+  <div class="card">
+    <div class="linkgroup"><h3>Búsqueda general · BOG⇄TYO</h3><div id="lg-general"></div></div>
+    <div class="linkgroup"><h3>Con escala en Canadá</h3><div id="lg-canada"></div></div>
+    <div class="linkgroup"><h3>Promos y alertas</h3><div id="lg-promo"></div></div>
+  </div>
+
+  <div class="section-head" style="margin-top:20px"><h1>Bitácora de precios</h1></div>
+  <div class="card">
+    <div class="extractor">
+      <div class="exhead">Extractor — pega el precio</div>
+      <div class="note" style="margin:0 0 8px">Abre el link, copia el precio y pégalo abajo. Detecta USD o COP.</div>
+      <div class="exrow">
+        <label>Ruta<select id="ex-ruta"><option value="directo">directo</option><option value="canada">canada</option><option value="promo">promo</option></select></label>
+        <label>Alcance<select id="ex-scope"><option value="total">Total pareja</option><option value="pp">Por persona</option></select></label>
+        <label>Moneda<select id="ex-cur"><option value="auto">Auto</option><option value="USD">USD</option><option value="COP">COP</option></select></label>
+      </div>
+      <textarea id="ex-paste" placeholder="Pega aquí — ej: US$3,200 · COP 12.600.000 · 1.595"></textarea>
+      <div class="btnrow"><button class="btn" id="ex-go">Extraer precio</button></div>
+      <div id="ex-result"></div>
+    </div>
+
+    <details>
+      <summary style="cursor:pointer;font-size:12px;color:var(--text-2);font-weight:600">Modo avanzado · CSV manual</summary>
+      <div class="note" style="margin-top:6px">Formato: <code>fecha,ruta,precio,moneda,usd_pp,veredicto,fuente,nota</code></div>
+      <textarea id="csv" placeholder="2026-11-01,directo,3200,USD,,,google,primer rastreo"></textarea>
+      <div class="btnrow"><button class="btn" id="add">Agregar al registro</button></div>
+    </details>
+
+    <div class="btnrow">
+      <button class="btn ghost" id="export">Exportar CSV</button>
+      <button class="btn warn" id="clear">Borrar todo</button>
+    </div>
+    <div class="msg" id="msg"></div>
+
+    <div class="stats">
+      <div class="stat"><div class="n" id="s-count">0</div><div class="l">Registros</div></div>
+      <div class="stat"><div class="n" id="s-min">—</div><div class="l">Mínimo (pp)</div></div>
+      <div class="stat"><div class="n" id="s-avg">—</div><div class="l">Promedio</div></div>
+      <div class="stat"><div class="n" id="s-last">—</div><div class="l">Última</div></div>
+    </div>
+
+    <div class="chartwrap"><svg id="chart" viewBox="0 0 780 300" role="img" aria-label="Curva de precios"></svg></div>
+
+    <div style="overflow-x:auto;margin-top:12px">
+      <table id="logtable">
+        <thead><tr><th>Fecha</th><th>Ruta</th><th>USD pp</th><th>Veredicto</th><th>Fuente</th><th>Nota</th><th></th></tr></thead>
+        <tbody></tbody>
       </table>
     </div>
-    <div class="alerts">
-      <div class="alert a1"><div class="at">✦ Stopover Turkish</div>Da <b>1 noche de hotel 4★ gratis</b>, asignada al 21 nov. Se solicita con el PNR, <b>72h antes</b> del tramo.</div>
-      <div class="alert a2"><div class="at">⚠ Umbral de precio</div>Si el multi-city cotiza <b>≥ USD 1.700 pp</b>, cotizar el <b>plan B de tiquetes partidos</b> ese mismo día (ver pestaña 7).</div>
-      <div class="alert a3"><div class="at">✓ Ruta sin fronteras hostiles</div>Se evitaron <b>EE.UU./Canadá</b> (visa de tránsito) y <b>México</b> (riesgo de inadmisión). Estambul es marco seguro en ambos sentidos.</div>
-    </div>
-  </section>
+  </div>
+  <div class="note">Gatillos: <b style="color:var(--green)">≤1.300 Compra ya</b> · <b style="color:var(--turq)">≤1.500 Justo</b> · <b style="color:var(--amber)">1.500–1.700 Esperar</b> · <b style="color:var(--red)">≥1.700 Partir</b></div>
+</section>
 
-  <!-- ===================== TAB 2 ===================== -->
-  <section class="panel" id="t2">
-    <h2 class="sec">Calendario — 3 actos + despegue</h2>
-    <div class="acc c-col"><div class="head"><div><div class="ttl">Acto 0 · Despegue volado</div><div class="meta">Jue 28 oct</div></div><span class="chev">▶</span></div>
-      <div class="body">El jueves es "volado" y el viernes medio día habitual: el viaje arranca sin quemar día hábil completo. MDE→BOG a mediodía, y de Bogotá sale el Turkish de las 17:00 hacia Estambul.</div></div>
+<!-- ═══ T8: CHECKLIST ═══ -->
+<section class="panel" id="t8">
+  <div class="section-head"><h1>Checklist</h1><p>Hitos cronológicos</p></div>
+  <div class="progress"><div id="prog"></div></div>
+  <div class="card"><ul class="chk" id="chk"></ul></div>
+  <div class="note">Se guarda en este navegador. La casilla en rojo es la fecha crítica: <b>radicar la visa de Japón ~1 ago 2027</b>.</div>
+</section>
 
-    <div class="acc c-ist"><div class="head"><div><div class="ttl">Acto 1 · Estambul aperitivo</div><div class="meta">Vie 29 – Dom 31 oct · 2 noches</div></div><span class="chev">▶</span></div>
-      <div class="body">
-        <div class="subrow"><b>Vie 29</b><span>Llegada 17:00. Check-in en <b>Karaköy</b>, cena tranquila, dormir el jet lag.</span></div>
-        <div class="subrow"><b>Sáb 30</b><span>Día completo: Gran Bazar, Bósforo, rooftops de Karaköy/Beyoğlu. Ritmo alto pero sin correr.</span></div>
-        <div class="subrow"><b>Dom 31</b><span>Mañana suelta, y <b>vuelo nocturno a Tokio</b>. Se duerme en el aire hacia Japón.</span></div>
-      </div></div>
-
-    <div class="acc c-jp"><div class="head"><div><div class="ttl">Acto 2 · Japón</div><div class="meta">Lun 1 – Sáb 20 nov · 19 noches · 7 paradas</div></div><span class="chev">▶</span></div>
-      <div class="body">
-        <div class="subrow"><b>Tokio · 5n</b><span>Aterrizaje, Shibuya/Shinjuku, comida y rumba. El ancla de alta intensidad.</span></div>
-        <div class="subrow"><b>Kanazawa · 2n</b><span>Kenroku-en, barrio geisha Higashi Chaya, mercado Omicho. Pausa señorial.</span></div>
-        <div class="subrow"><b>Osaka · 2n</b><span>Namba y Dotonbori: comida callejera y vida nocturna.</span></div>
-        <div class="subrow"><b>Hiroshima+Miyajima · 2n</b><span>Museo de la Paz y torii flotante al atardecer.</span></div>
-        <div class="subrow"><b>Kioto · 5n</b><span>Pico de momiji: Fushimi Inari al amanecer, Arashiyama, excursión a Nara.</span></div>
-        <div class="subrow"><b>Hakone · 2n</b><span>Ryokan con onsen y kaiseki. El splurge y el descanso deliberado.</span></div>
-        <div class="subrow"><b>Tokio final · 1n</b><span>Regreso a Tokio, última noche antes del vuelo a Estambul.</span></div>
-      </div></div>
-
-    <div class="acc c-ist"><div class="head"><div><div class="ttl">Acto 3 · Estambul descompresión</div><div class="meta">Dom 21 – Mar 23 nov · 2 noches</div></div><span class="chev">▶</span></div>
-      <div class="body">
-        <div class="subrow"><b>Dom 21</b><span>Llegada de Tokio. <b>Hotel del Stopover</b> (gratis, 4★). Hammam para deshacer el vuelo largo.</span></div>
-        <div class="subrow"><b>Lun 22</b><span><b>Kadıköy</b> (lado asiático): mercado, meyhanes, vida local. Cierre relajado del viaje.</span></div>
-        <div class="subrow"><b>Mar 23</b><span>Vuelo de regreso TK800 09:40 → BOG 15:05, y shuttle a Medellín.</span></div>
-      </div></div>
-  </section>
-
-  <!-- ===================== TAB 3 ===================== -->
-  <section class="panel" id="t3">
-    <h2 class="sec">Ciudades — paradas japonesas + Estambul</h2>
-    <div id="cities"></div>
-  </section>
-
-  <!-- ===================== TAB 4 ===================== -->
-  <section class="panel" id="t4">
-    <h2 class="sec">Trenes — tramos y estrategia de pase</h2>
-    <div class="card pad">
-      <table>
-        <thead><tr><th>Tramo</th><th>Precio (billete suelto)</th></tr></thead>
-        <tbody>
-          <tr><td>Narita → Tokio</td><td class="mono">¥2.500 – 3.100</td></tr>
-          <tr><td>Tokio → Kanazawa</td><td class="mono">~¥14.400</td></tr>
-          <tr><td>Kanazawa → Osaka</td><td class="mono">~¥8.000</td></tr>
-          <tr><td>Osaka → Hiroshima</td><td class="mono">~¥10.600</td></tr>
-          <tr><td>Hiroshima → Kioto</td><td class="mono">~¥11.300</td></tr>
-          <tr><td>Kioto → Odawara (Hakone)</td><td class="mono">~¥12.500</td></tr>
-          <tr><td>Hakone → Tokio</td><td class="mono">~¥2.500 – 3.300</td></tr>
-          <tr><td>Tokio → aeropuerto</td><td class="mono">~¥2.500 – 3.100</td></tr>
-        </tbody>
-      </table>
-      <div class="alerts" style="grid-template-columns:1fr 1fr">
-        <div class="alert a1"><div class="at">✓ Billetes sueltos ganan… por poco</div>Los tramos largos suman <b>~¥44.300</b>, por debajo del <b>JR Pass de 7 días (¥50.000)</b>. Con esta ruta, comprar suelto sale mejor.</div>
-        <div class="alert a2"><div class="at">⚠ Subida del pase</div>Desde el <b>1 oct 2026</b> el JR Pass sube a <b>¥53.000 / ¥84.000</b> (7/14 días). Refuerza la decisión de ir suelto.</div>
-      </div>
-      <div class="note">La app <b>SmartEX</b> da hasta <b>30% de descuento</b> comprando los shinkansen con anticipación — vale la pena registrarse antes del viaje.</div>
-    </div>
-  </section>
-
-  <!-- ===================== TAB 5 ===================== -->
-  <section class="panel" id="t5">
-    <h2 class="sec">Presupuesto — pareja, 27 días (USD)</h2>
-    <div class="card pad">
-      <div class="bud" id="bud"></div>
-      <div class="budtotal">
-        <span>Total: <span class="mono">USD 8.500 – 10.300</span></span>
-        <span class="mono">≈ COP 33,6 – 40,7M</span>
-        <span class="ok">Fondo 39,8M + rendimientos · Cubierto ✓</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===================== TAB 6 ===================== -->
-  <section class="panel" id="t6">
-    <h2 class="sec">Plan de ahorro — flujo de caja</h2>
-    <div class="card pad">
-      <table>
-        <thead><tr><th>Momento</th><th>Movimiento</th><th>Nota</th></tr></thead>
-        <tbody>
-          <tr><td>Jul 2026 →</td><td><b>+2.000.000 / mes</b> (Henry)</td><td>Aporte fijo mensual arranca.</td></tr>
-          <tr><td>Oct 2026 →</td><td><b>+600.000 / mes</b> (ella)</td><td>Se suma el segundo aporte.</td></tr>
-          <tr><td>Nov 2026</td><td>Black Friday <span class="tag t-th">condicional</span></td><td>Solo si aparece tarifa base 2026 clara.</td></tr>
-          <tr><td>Mar 2027</td><td>Pasaportes</td><td>Vigencia y páginas en regla antes de la visa.</td></tr>
-          <tr><td>May 2027</td><td>Vacaciones por escrito</td><td>15 días hábiles confirmados con la empresa.</td></tr>
-          <tr><td>Jun 2027</td><td><b>Compra multi-city (~11,8M)</b></td><td>Mayor pago del viaje. Da las reservas para la visa.</td></tr>
-          <tr><td>Jul 2027</td><td>Shuttles MDE↔BOG</td><td>Domésticos, ambos sentidos.</td></tr>
-          <tr><td>~1 Ago 2027</td><td><b>Visa Japón + ryokan + hotel Kioto (~4,3M)</b></td><td>Radicación y las reservas de mayor demanda.</td></tr>
-          <tr><td>Sep 2027</td><td>Hoteles restantes</td><td>Resto del alojamiento en Japón y Estambul.</td></tr>
-          <tr><td>Oct 2027</td><td>Trenes y divisas</td><td>SmartEX anticipado + efectivo/tarjeta.</td></tr>
-          <tr><td>28 Oct 2027</td><td><b>Despegue con ~16,5M líquidos</b></td><td>Colchón para el viaje en curso.</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- ===================== TAB 7 ===================== -->
-  <section class="panel" id="t7">
-    <h2 class="sec">Vigilar Vuelos — links, gatillos y bitácora</h2>
-
-    <div class="cd" id="cd">
-      <div class="big" id="cd-n">—</div>
-      <div class="lbl">días hasta que <b>Turkish carga el inventario 2027</b><br>Objetivo: <b>1 de noviembre de 2026</b>. Antes de esa fecha, las cotizaciones 2027 no son fiables.</div>
-    </div>
-
-    <div class="card pad">
-      <div class="linkgroup">
-        <h3>① Línea base · BOG⇄TYO temporada 2026 <span style="color:var(--muted);font-weight:400">(estas fechas SÍ existen hoy)</span></h3>
-        <div id="lg-base"></div>
-      </div>
-      <div class="linkgroup">
-        <h3>② Multi-city real 2027</h3>
-        <div id="lg-multi"></div>
-      </div>
-      <div class="linkgroup">
-        <h3>③ Plan B · tiquetes partidos</h3>
-        <div id="lg-split"></div>
-      </div>
-      <div class="linkgroup">
-        <h3>④ Promos y alertas</h3>
-        <div id="lg-promo"></div>
-      </div>
-    </div>
-
-    <h2 class="sec" style="margin-top:26px">Bitácora de precios</h2>
-    <div class="card pad">
-      <div class="extractor">
-        <div class="exhead">◎ Extractor — pega el precio y listo</div>
-        <div class="note" style="margin:0">Abre el link (botón <b>◎ cotizar</b>), copia el precio de la página y pégalo abajo. Detecta USD o COP solo.</div>
-        <div class="exrow">
-          <label>Ruta
-            <select id="ex-ruta"><option value="multi">multi</option><option value="base">base</option><option value="split">split</option><option value="promo">promo</option></select>
-          </label>
-          <label>El precio es
-            <select id="ex-scope"><option value="total">Total pareja</option><option value="pp">Por persona</option></select>
-          </label>
-          <label>Moneda
-            <select id="ex-cur"><option value="auto">Auto</option><option value="USD">USD</option><option value="COP">COP</option></select>
-          </label>
-        </div>
-        <textarea id="ex-paste" placeholder="Pega aquí lo copiado — ej: US$3,200 · COP 12.600.000 · $12.600.000 · 1.595"></textarea>
-        <div class="btnrow"><button class="btn" id="ex-go">Extraer precio</button></div>
-        <div id="ex-result"></div>
-      </div>
-
-      <details>
-        <summary style="cursor:pointer;font-size:12.5px;color:var(--muted);font-weight:600">Modo avanzado · pegar CSV a mano</summary>
-        <div class="note" style="margin-top:8px">
-          Líneas: <code>fecha,ruta,precio,moneda,usd_pp,veredicto,fuente,nota</code>.
-          Fecha <code>YYYY-MM-DD</code>. <code>ruta</code> ∈ {base, multi, split, promo}. <code>moneda</code> ∈ {USD, COP} (COP en miles).
-          <code>precio</code> total de la pareja; si <code>usd_pp</code> o <code>veredicto</code> van vacíos, se calculan.
-        </div>
-        <textarea id="csv" placeholder="2026-11-01,multi,3200,USD,,,kayak,inventario recién abierto&#10;2026-11-15,multi,12600,COP,,,turkish,cotización en pesos (miles)"></textarea>
-        <div class="btnrow"><button class="btn" id="add">Agregar al registro</button></div>
-      </details>
-
-      <div class="btnrow">
-        <button class="btn ghost" id="export">Exportar CSV</button>
-        <button class="btn warn" id="clear">Borrar todo</button>
-      </div>
-      <div class="msg" id="msg"></div>
-
-      <div class="stats">
-        <div class="stat"><div class="n" id="s-count">0</div><div class="l">Registros</div></div>
-        <div class="stat"><div class="n" id="s-min">—</div><div class="l">Mínimo visto (pp)</div></div>
-        <div class="stat"><div class="n" id="s-avg">—</div><div class="l">Promedio temporada</div></div>
-        <div class="stat"><div class="n" id="s-last">—</div><div class="l">Última consulta</div></div>
-      </div>
-
-      <div class="chartwrap">
-        <svg id="chart" viewBox="0 0 780 300" role="img" aria-label="Curva de precios"></svg>
-      </div>
-
-      <div style="overflow-x:auto;margin-top:14px">
-        <table id="logtable">
-          <thead><tr><th>Fecha</th><th>Ruta</th><th>USD pp</th><th>Veredicto</th><th>Fuente</th><th>Nota</th><th></th></tr></thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </div>
-    <div class="note">Gatillos: <b style="color:var(--green)">≤1.300 Compra ya</b> · <b style="color:var(--turq)">≤1.500 Justo</b> · <b style="color:var(--amber)">1.500–1.700 Esperar</b> · <b style="color:var(--red)">≥1.700 Partir</b>. Todo se guarda en este navegador.</div>
-  </section>
-
-  <!-- ===================== TAB 8 ===================== -->
-  <section class="panel" id="t8">
-    <h2 class="sec">Checklist — hitos cronológicos</h2>
-    <div class="progress"><div id="prog"></div></div>
-    <div class="card pad"><ul class="chk" id="chk"></ul></div>
-    <div class="note">Se marca solo y se guarda en este navegador. La casilla en rojo es la fecha crítica: <b>radicar la visa de Japón ~1 ago 2027</b>.</div>
-  </section>
-</div>
+</main>
 
 <script>
 "use strict";
 var TRM=3950;
 
-/* ---------- TABS ---------- */
-var tabs=document.getElementById('tabs');
-tabs.addEventListener('click',function(e){
-  var b=e.target.closest('button'); if(!b) return;
-  [].forEach.call(tabs.children,function(x){x.classList.remove('active');});
+/* ─── THEME ─── */
+var themeBtn=document.getElementById('theme-btn');
+var saved=localStorage.getItem('jp2027_theme');
+if(saved)document.documentElement.setAttribute('data-theme',saved);
+function isDark(){
+  var t=document.documentElement.getAttribute('data-theme');
+  if(t)return t==='dark';
+  return window.matchMedia('(prefers-color-scheme:dark)').matches;
+}
+function updateThemeIcon(){themeBtn.textContent=isDark()?'☀':'☽';}
+updateThemeIcon();
+themeBtn.addEventListener('click',function(){
+  var next=isDark()?'light':'dark';
+  document.documentElement.setAttribute('data-theme',next);
+  localStorage.setItem('jp2027_theme',next);
+  updateThemeIcon();
+  if(typeof drawChart==='function')drawChart();
+});
+
+/* ─── SIDEBAR NAV ─── */
+var sidebar=document.getElementById('sidebar');
+var backdrop=document.getElementById('backdrop');
+var menuBtn=document.getElementById('menu-btn');
+var mobileTitle=document.getElementById('mobile-title');
+
+function closeSidebar(){sidebar.classList.remove('open');backdrop.classList.remove('show');}
+menuBtn.addEventListener('click',function(){sidebar.classList.toggle('open');backdrop.classList.toggle('show');});
+backdrop.addEventListener('click',closeSidebar);
+
+document.querySelector('.sb-nav').addEventListener('click',function(e){
+  var b=e.target.closest('.sb-item');if(!b)return;
+  [].forEach.call(document.querySelectorAll('.sb-item'),function(x){x.classList.remove('active');});
   b.classList.add('active');
   [].forEach.call(document.querySelectorAll('.panel'),function(p){p.classList.remove('active');});
   document.getElementById(b.dataset.t).classList.add('active');
+  mobileTitle.textContent=b.textContent;
+  closeSidebar();
   window.scrollTo({top:0,behavior:'smooth'});
 });
 
-/* ---------- ACCORDIONS (calendar) ---------- */
-[].forEach.call(document.querySelectorAll('#t2 .acc'),function(a){
-  a.querySelector('.head').addEventListener('click',function(){a.classList.toggle('open');});
-});
-document.querySelector('#t2 .acc').classList.add('open');
+/* ─── SIDEBAR COUNTDOWN ─── */
+(function(){
+  var today=new Date();today.setHours(0,0,0,0);
+  var dep=new Date(2027,9,28);
+  var d=Math.round((dep-today)/864e5);
+  document.getElementById('sb-days').textContent=d>0?d:'¡HOY!';
+})();
 
-/* ---------- TAB 3: CITIES ---------- */
+/* ─── ACCORDIONS ─── */
+document.addEventListener('click',function(e){
+  var h=e.target.closest('.acc .head');if(!h)return;
+  h.closest('.acc').classList.toggle('open');
+});
+
+/* ─── TAB 3: CITIES ─── */
 var CITIES=[
- {c:'c-jp',t:'Tokio',n:'5 noches',how:'Aterrizaje directo desde Estambul (Narita).',stay:'Shibuya / Shinjuku · gama media',uniq:'La ciudad-ancla: dining sin fin, izakayas, rumba de Golden Gai a clubes de Shibuya.',w:'10–17 °C, seco y despejado'},
- {c:'c-jp',t:'Kanazawa',n:'2 noches',how:'Hokuriku shinkansen 2h30–3h desde Tokio.',stay:'Centro, cerca de Kenroku-en · gama media',uniq:'Kenroku-en, barrio geisha Higashi Chaya, mercado Omicho de mariscos.',w:'8–14 °C, llovizna'},
- {c:'c-jp',t:'Osaka',n:'2 noches',how:'Vía Tsuruga ~2h40 desde Kanazawa.',stay:'Namba · gama media',uniq:'Namba y Dotonbori: capital de la comida callejera y la noche.',w:'9–16 °C'},
- {c:'c-jp',t:'Hiroshima + Miyajima',n:'2 noches',how:'Shinkansen 1h25 desde Osaka.',stay:'Centro Hiroshima · gama media',uniq:'Museo de la Paz y el torii flotante de Miyajima al atardecer.',w:'9–16 °C'},
- {c:'c-jp',t:'Kioto',n:'5 noches',how:'Shinkansen ~1h50 desde Hiroshima.',stay:'Cerca de Kawaramachi/Gion · gama media',uniq:'Pico de momiji (15–25 nov): Fushimi Inari al amanecer, Arashiyama, excursión a Nara.',w:'7–16 °C'},
- {c:'c-jp',t:'Hakone',n:'2 noches',how:'Hikari a Odawara ~2h05 + Hakone Free Pass.',stay:'Ryokan con onsen · USD 250–330/noche (splurge)',uniq:'Onsen, kaiseki, vistas al Fuji. El descanso deliberado del viaje.',w:'5–13 °C'},
- {c:'c-jp',t:'Tokio final',n:'1 noche',how:'Regreso desde Hakone ~1h30.',stay:'Cerca de aeropuerto/estación · funcional',uniq:'Noche de cierre antes del vuelo nocturno a Estambul.',w:'10–17 °C'},
- {c:'c-ist',t:'Estambul (marco)',n:'2 + 2 noches',how:'Turkish en ambos sentidos. Sin visa para pasaporte colombiano.',stay:'Karaköy · gama media',uniq:'Bósforo, hammam, Kadıköy en el lado asiático. Se mueve en BiTaksi.',w:'8–15 °C'}
+ {t:'Tokio',n:'5 noches',how:'Vuelo directo a Narita/Haneda.',stay:'Shibuya / Shinjuku · gama media',uniq:'Ciudad-ancla: dining, izakayas, rumba de Golden Gai a clubes de Shibuya.',w:'10–17 °C, seco'},
+ {t:'Kanazawa',n:'2 noches',how:'Hokuriku shinkansen 2h30–3h desde Tokio.',stay:'Centro · gama media',uniq:'Kenroku-en, barrio geisha Higashi Chaya, mercado Omicho.',w:'8–14 °C, llovizna'},
+ {t:'Osaka',n:'2 noches',how:'Vía Tsuruga ~2h40 desde Kanazawa.',stay:'Namba · gama media',uniq:'Namba y Dotonbori: capital de la comida callejera y la noche.',w:'9–16 °C'},
+ {t:'Hiroshima + Miyajima',n:'2 noches',how:'Shinkansen 1h25 desde Osaka.',stay:'Centro Hiroshima · gama media',uniq:'Museo de la Paz y torii flotante de Miyajima al atardecer.',w:'9–16 °C'},
+ {t:'Kioto',n:'5 noches',how:'Shinkansen ~1h50 desde Hiroshima.',stay:'Kawaramachi/Gion · gama media',uniq:'Pico de momiji (15–25 nov): Fushimi Inari, Arashiyama, Nara.',w:'7–16 °C'},
+ {t:'Hakone',n:'2 noches',how:'Hikari a Odawara ~2h05 + Hakone Free Pass.',stay:'Ryokan onsen · USD 250–330/noche (splurge)',uniq:'Onsen, kaiseki, vistas al Fuji. El descanso deliberado.',w:'5–13 °C'},
+ {t:'Tokio final',n:'1 noche',how:'Regreso desde Hakone ~1h30.',stay:'Cerca de estación · funcional',uniq:'Noche de cierre antes del vuelo de regreso.',w:'10–17 °C'}
 ];
 document.getElementById('cities').innerHTML=CITIES.map(function(x,i){
-  return '<div class="acc '+x.c+(i===0?' open':'')+'"><div class="head"><div><div class="ttl">'+x.t+
+  return '<div class="acc'+(i===0?' open':'')+'"><div class="head"><div><div class="ttl"><span class="dot" style="background:var(--accent)"></span>'+x.t+
     '</div><div class="meta">'+x.n+'</div></div><span class="chev">▶</span></div><div class="body">'+
     '<div class="kv"><div class="k">Cómo se llega</div><div class="v">'+x.how+'</div></div>'+
     '<div class="kv"><div class="k">Dónde dormir</div><div class="v">'+x.stay+'</div></div>'+
     '<div class="kv"><div class="k">Qué la hace única</div><div class="v">'+x.uniq+'</div></div>'+
     '<div class="kv"><div class="k">Clima noviembre</div><div class="v">'+x.w+'</div></div></div></div>';
 }).join('');
-[].forEach.call(document.querySelectorAll('#cities .acc'),function(a){
-  a.querySelector('.head').addEventListener('click',function(){a.classList.toggle('open');});
-});
 
-/* ---------- TAB 5: BUDGET ---------- */
+/* ─── TAB 5: BUDGET ─── */
 var BUD=[
- ['Multi-city Turkish',2700,3100],
- ['Shuttles MDE↔BOG',130,170],
- ['Trenes Japón',800,950],
- ['Ryokan Hakone (2 noches)',500,650],
- ['Hoteles funcionales Japón (17 noches)',1300,1650],
- ['Hoteles Estambul (3 noches pagas)',230,330],
- ['Comida + salidas + rumba (27 días · intocable)',2600,3100],
- ['Visa + seguro + eSIM + margen',250,380]
+ ['Vuelos internacionales (vía Canadá)',2700,3200],['Shuttles MDE↔BOG',130,170],['Trenes Japón',800,950],
+ ['Ryokan Hakone (2 noches)',500,650],['Hoteles funcionales (19 noches)',1500,1900],
+ ['Comida + salidas + rumba (intocable)',2100,2700],
+ ['Visa + seguro + eSIM + eTA + margen',280,400]
 ];
 var budMax=Math.max.apply(null,BUD.map(function(b){return b[2];}));
 document.getElementById('bud').innerHTML=BUD.map(function(b){
   var w=(b[2]/budMax*100).toFixed(1);
-  return '<div class="bitem"><div class="top"><b>'+b[0]+'</b><span class="rng">USD '+b[1].toLocaleString()+' – '+b[2].toLocaleString()+'</span></div>'+
+  return '<div class="bitem"><div class="top"><b>'+b[0]+'</b><span class="rng mono">'+b[1].toLocaleString()+' – '+b[2].toLocaleString()+'</span></div>'+
     '<div class="btrack"><div class="bfill" style="width:'+w+'%"></div></div></div>';
 }).join('');
 
-/* ---------- TAB 7: LINKS ---------- */
+/* ─── TAB 7: LINKS ─── */
 var LINKS={
- base:[
-  ['Google Flights · BOG→TYO 2026','https://www.google.com/travel/flights?q=Flights%20to%20TYO%20from%20BOG%20on%202026-10-28%20through%202026-11-23'],
-  ['Skyscanner · BOG→TYO','https://www.skyscanner.com.co/transporte/vuelos/bog/tyoa/']
- ],
- multi:[
-  ['Kayak · multi-city 2027 (2 adultos)','https://www.kayak.com.co/flights/BOG-IST/2027-10-28/IST-TYO/2027-10-31/TYO-IST/2027-11-20/IST-BOG/2027-11-23/2adults'],
-  ['Turkish Airlines','https://www.turkishairlines.com/'],
-  ['Google Flights · BOG→TYO 2027','https://www.google.com/travel/flights?q=Flights%20to%20TYO%20from%20BOG%20on%202027-10-28%20through%202027-11-23']
- ],
- split:[
-  ['Google Flights · BOG→IST 2027','https://www.google.com/travel/flights?q=Flights%20to%20IST%20from%20BOG%20on%202027-10-28%20through%202027-11-23'],
-  ['Google Flights · IST→TYO 2027','https://www.google.com/travel/flights?q=Flights%20to%20TYO%20from%20IST%20on%202027-10-31%20through%202027-11-20']
- ],
- promo:[
-  ['Turkish · vuelos desde Bogotá','https://www.turkishairlines.com/en/flights-from-bogota'],
-  ['Turkish · campañas','https://www.turkishairlines.com/en-us/campaigns/'],
-  ['Turkish · Miles&Smiles','https://www.turkishairlines.com/es-int/miles-and-smiles/'],
-  ['Secret Flying','https://www.secretflying.com/']
- ]
+ general:[['Google Flights · BOG→TYO','https://www.google.com/travel/flights?q=Flights%20to%20TYO%20from%20BOG%20on%202027-10-28%20through%202027-11-23'],
+  ['Skyscanner · BOG→TYO','https://www.skyscanner.com.co/transporte/vuelos/bog/tyoa/'],
+  ['Kayak · BOG→TYO','https://www.kayak.com.co/flights/BOG-TYO/2027-10-28/TYO-BOG/2027-11-20/2adults']],
+ canada:[['Google Flights · BOG→YYZ→TYO','https://www.google.com/travel/flights?q=Flights%20to%20TYO%20from%20BOG%20on%202027-10-28%20through%202027-11-23%20via%20YYZ'],
+  ['Air Canada · BOG→TYO','https://www.aircanada.com/'],
+  ['Google Flights · BOG→YVR→TYO','https://www.google.com/travel/flights?q=Flights%20to%20TYO%20from%20BOG%20on%202027-10-28%20through%202027-11-23%20via%20YVR']],
+ promo:[['Secret Flying','https://www.secretflying.com/'],
+  ['Momondo · BOG→TYO','https://www.momondo.com.co/flight-search/BOG-TYO/2027-10-28/2027-11-20']]
 };
-function srcOf(label){return label.split('·')[0].trim().split(' ')[0].toLowerCase();}
+function srcOf(l){return l.split('·')[0].trim().split(' ')[0].toLowerCase();}
 function renderLinks(id,arr,ruta){
   document.getElementById(id).innerHTML=arr.map(function(l){
     return '<div class="lrow"><a href="'+l[1]+'" target="_blank" rel="noopener">'+l[0]+'</a>'+
-      '<button class="quote" data-url="'+l[1]+'" data-ruta="'+ruta+'" data-src="'+srcOf(l[0])+'">◎ cotizar</button>'+
-      '<button class="copy" data-url="'+l[1]+'">⧉ copiar</button></div>';
+      '<button class="pill quote" data-url="'+l[1]+'" data-ruta="'+ruta+'" data-src="'+srcOf(l[0])+'">cotizar</button>'+
+      '<button class="pill" data-url="'+l[1]+'">copiar</button></div>';
   }).join('');
 }
-renderLinks('lg-base',LINKS.base,'base');renderLinks('lg-multi',LINKS.multi,'multi');
-renderLinks('lg-split',LINKS.split,'split');renderLinks('lg-promo',LINKS.promo,'promo');
+renderLinks('lg-general',LINKS.general,'directo');renderLinks('lg-canada',LINKS.canada,'canada');
+renderLinks('lg-promo',LINKS.promo,'promo');
 
-/* "Cotizar": abre la página y pre-carga la línea CSV en la bitácora para pegar el precio */
+/* copy & quote handlers */
 document.addEventListener('click',function(e){
-  var b=e.target.closest('.quote'); if(!b) return;
+  var b=e.target.closest('.pill.quote');if(!b)return;
   try{window.open(b.dataset.url,'_blank','noopener');}catch(_){}
   var d=new Date(),today=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
   var line=today+','+b.dataset.ruta+',,USD,,,'+b.dataset.src+',';
   var ta=document.getElementById('csv');
   ta.value=(ta.value.trim()?ta.value.replace(/\s+$/,'')+'\n':'')+line;
   ta.focus();
-  // deja el cursor donde va el precio (3er campo) para escribirlo de una
   var pos=ta.value.lastIndexOf(line)+today.length+1+b.dataset.ruta.length+1;
   try{ta.setSelectionRange(pos,pos);}catch(_){}
   ta.scrollIntoView({behavior:'smooth',block:'center'});
-  var o=b.textContent;b.textContent='◎ pega el precio ↓';b.classList.add('done');
+  var o=b.textContent;b.textContent='pega el precio ↓';b.classList.add('done');
   setTimeout(function(){b.textContent=o;b.classList.remove('done');},2500);
-  document.getElementById('msg').textContent='Línea lista en la bitácora — escribe el precio total de la pareja (USD) en el 3.er campo y pulsa "Agregar".';
+  document.getElementById('msg').textContent='Línea lista — escribe el precio total de la pareja (USD) y pulsa Agregar.';
 });
 document.addEventListener('click',function(e){
-  var b=e.target.closest('.copy'); if(!b) return;
+  var b=e.target.closest('.pill:not(.quote)');if(!b||!b.dataset.url)return;
   var url=b.dataset.url;
-  var done=function(){var o=b.textContent;b.textContent='✓ copiado';b.classList.add('done');
+  var done=function(){var o=b.textContent;b.textContent='copiado';b.classList.add('done');
     setTimeout(function(){b.textContent=o;b.classList.remove('done');},1500);};
-  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url).then(done,fallback);}else{fallback();}
-  function fallback(){var ta=document.createElement('textarea');ta.value=url;document.body.appendChild(ta);
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url).then(done,fb);}else{fb();}
+  function fb(){var ta=document.createElement('textarea');ta.value=url;document.body.appendChild(ta);
     ta.select();try{document.execCommand('copy');}catch(_){}document.body.removeChild(ta);done();}
 });
 
-/* ---------- TAB 7: COUNTDOWN to 2026-11-01 ---------- */
-(function(){
-  var today=new Date();today.setHours(0,0,0,0);
-  var target=new Date(2026,10,1);
-  var d=Math.round((target-today)/86400000);
-  var cd=document.getElementById('cd'),n=document.getElementById('cd-n');
-  if(d>0){n.textContent=d;}
-  else{cd.classList.add('open');n.textContent='ABIERTO';
-    cd.querySelector('.lbl').innerHTML='El inventario 2027 de Turkish <b>ya está cargado</b>. Cotiza el multi-city real y registra en la bitácora.';}
-})();
-
-/* ---------- TAB 7: BITÁCORA ---------- */
+/* ─── BITÁCORA ─── */
 var LKEY='jp2027_log';
-function loadLog(){try{return JSON.parse(localStorage.getItem(LKEY))||[];}catch(_){return [];}}
+function loadLog(){try{return JSON.parse(localStorage.getItem(LKEY))||[];}catch(_){return[];}}
 function saveLog(a){try{localStorage.setItem(LKEY,JSON.stringify(a));}catch(_){}}
 var LOG=loadLog();
 
 function verdictOf(pp){
-  if(pp<=1300) return {k:'Compra ya',c:'v-green',col:'#63B77C'};
-  if(pp<=1500) return {k:'Justo',c:'v-turq',col:'#2FA6A0'};
-  if(pp<1700)  return {k:'Esperar',c:'v-amber',col:'#E3A431'};
-  return {k:'Partir',c:'v-red',col:'#D8442E'};
+  if(pp<=1300)return{k:'Compra ya',c:'v-green',col:'#63B77C'};
+  if(pp<=1500)return{k:'Justo',c:'v-turq',col:'#2FA6A0'};
+  if(pp<1700)return{k:'Esperar',c:'v-amber',col:'#E3A431'};
+  return{k:'Partir',c:'v-red',col:'#D8442E'};
 }
-function validDate(s){return /^\d{4}-\d{2}-\d{2}$/.test(s)&&!isNaN(new Date(s+'T00:00:00').getTime());}
+function validDate(s){return/^\d{4}-\d{2}-\d{2}$/.test(s)&&!isNaN(new Date(s+'T00:00:00').getTime());}
+function esc(s){return(s||'').replace(/[<>&]/g,function(c){return{'<':'&lt;','>':'&gt;','&':'&amp;'}[c];});}
 
 function parseCSV(text){
   var out=[],bad=0;
   text.split(/\r?\n/).forEach(function(line){
-    line=line.trim(); if(!line) return;
+    line=line.trim();if(!line)return;
     var p=line.split(',').map(function(x){return x.trim();});
     if(p.length<3){bad++;return;}
-    var fecha=p[0], ruta=(p[1]||'').toLowerCase(), precio=parseFloat(p[2]),
-        moneda=(p[3]||'USD').toUpperCase(), usd_pp=p[4]?parseFloat(p[4]):null,
-        fuente=p[6]||'', nota=p[7]||'';
+    var fecha=p[0],ruta=(p[1]||'').toLowerCase(),precio=parseFloat(p[2]),
+        moneda=(p[3]||'USD').toUpperCase(),usd_pp=p[4]?parseFloat(p[4]):null,
+        fuente=p[6]||'',nota=p[7]||'';
     if(!validDate(fecha)){bad++;return;}
-    if(['base','multi','split','promo'].indexOf(ruta)<0) ruta='multi';
+    if(['directo','canada','promo'].indexOf(ruta)<0)ruta='directo';
     if(isNaN(precio)){bad++;return;}
     if(usd_pp===null||isNaN(usd_pp)){
-      var totalUsd = moneda==='COP' ? (precio*1000/TRM) : precio;
-      usd_pp = totalUsd/2;
+      var totalUsd=moneda==='COP'?(precio*1000/TRM):precio;
+      usd_pp=totalUsd/2;
     }
     usd_pp=Math.round(usd_pp);
     out.push({fecha:fecha,ruta:ruta,usd_pp:usd_pp,veredicto:(p[5]||verdictOf(usd_pp).k),fuente:fuente,nota:nota});
   });
-  return {rows:out,bad:bad};
+  return{rows:out,bad:bad};
 }
 
 function refresh(){
   LOG.sort(function(a,b){return a.fecha<b.fecha?-1:a.fecha>b.fecha?1:0;});
-  // stats
   document.getElementById('s-count').textContent=LOG.length;
   if(LOG.length){
     var pps=LOG.map(function(r){return r.usd_pp;});
-    var mn=Math.min.apply(null,pps), av=Math.round(pps.reduce(function(a,b){return a+b;},0)/pps.length);
-    document.getElementById('s-min').textContent=mn.toLocaleString();
-    document.getElementById('s-avg').textContent=av.toLocaleString();
+    document.getElementById('s-min').textContent=Math.min.apply(null,pps).toLocaleString();
+    document.getElementById('s-avg').textContent=Math.round(pps.reduce(function(a,b){return a+b;},0)/pps.length).toLocaleString();
     document.getElementById('s-last').textContent=LOG[LOG.length-1].fecha;
   }else{
     document.getElementById('s-min').textContent='—';
     document.getElementById('s-avg').textContent='—';
     document.getElementById('s-last').textContent='—';
   }
-  // table
   var tb=document.querySelector('#logtable tbody');
   tb.innerHTML=LOG.slice().reverse().map(function(r,i){
-    var idx=LOG.length-1-i; var v=verdictOf(r.usd_pp);
-    return '<tr><td class="mono">'+r.fecha+'</td><td>'+r.ruta+'</td><td class="mono">'+r.usd_pp.toLocaleString()+
+    var idx=LOG.length-1-i;var v=verdictOf(r.usd_pp);
+    return'<tr><td class="mono">'+r.fecha+'</td><td>'+r.ruta+'</td><td class="mono">'+r.usd_pp.toLocaleString()+
       '</td><td><span class="vchip '+v.c+'">'+r.veredicto+'</span></td><td>'+esc(r.fuente)+'</td><td>'+esc(r.nota)+
       '</td><td><button class="rowx" data-i="'+idx+'">✕</button></td></tr>';
   }).join('');
   drawChart();
   saveLog(LOG);
 }
-function esc(s){return (s||'').replace(/[<>&]/g,function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;'}[c];});}
 
 document.getElementById('logtable').addEventListener('click',function(e){
-  var b=e.target.closest('.rowx'); if(!b) return;
-  LOG.splice(+b.dataset.i,1); refresh();
+  var b=e.target.closest('.rowx');if(!b)return;
+  LOG.splice(+b.dataset.i,1);refresh();
 });
 document.getElementById('add').addEventListener('click',function(){
   var r=parseCSV(document.getElementById('csv').value);
   var msg=document.getElementById('msg');
-  if(!r.rows.length){msg.textContent='No se agregó nada'+(r.bad?' · '+r.bad+' línea(s) inválida(s) descartada(s).':'.');return;}
+  if(!r.rows.length){msg.textContent='No se agregó nada'+(r.bad?' · '+r.bad+' inválida(s).':'.');return;}
   LOG=LOG.concat(r.rows);
-  msg.textContent='Agregados '+r.rows.length+' registro(s).'+(r.bad?' '+r.bad+' inválido(s) descartado(s).':'');
+  msg.textContent='Agregados '+r.rows.length+' registro(s).'+(r.bad?' '+r.bad+' inválido(s).':'');
   document.getElementById('csv').value='';
   refresh();
 });
-/* ---------- EXTRACTOR (pegar precio) ---------- */
+
+/* ─── EXTRACTOR ─── */
 function toNumber(s){
-  s=String(s).replace(/[^\d.,]/g,'');
-  if(!s) return NaN;
-  s=s.replace(/[.,](\d{2})$/,'');   // quita centavos finales (,00 / .00)
-  s=s.replace(/[.,]/g,'');          // quita separadores de miles
+  s=String(s).replace(/[^\d.,]/g,'');if(!s)return NaN;
+  s=s.replace(/[.,](\d{2})$/,'');s=s.replace(/[.,]/g,'');
   return parseInt(s,10);
 }
-function findAmounts(t){
-  var m=(t||'').match(/\d[\d.,]*\d|\d+/g)||[], out=[];
-  m.forEach(function(x){var n=toNumber(x);if(!isNaN(n)&&n>0)out.push(n);});
-  return out;
-}
+function findAmounts(t){var m=(t||'').match(/\d[\d.,]*\d|\d+/g)||[],out=[];
+  m.forEach(function(x){var n=toNumber(x);if(!isNaN(n)&&n>0)out.push(n);});return out;}
 var exResult=document.getElementById('ex-result');
 document.getElementById('ex-go').addEventListener('click',function(){
   var text=document.getElementById('ex-paste').value;
@@ -609,130 +653,114 @@ document.getElementById('ex-go').addEventListener('click',function(){
   var ruta=document.getElementById('ex-ruta').value;
   var nums=findAmounts(text);
   if(!nums.length){exResult.className='show';
-    exResult.innerHTML='<span style="color:var(--red)">No encontré ningún número. Copia el precio de la página y pégalo aquí.</span>';return;}
-  var cur=curSel!=='auto'?curSel:( /US\$|\bUSD\b|d[oó]lar/i.test(text)?'USD':(/\bCOP\b|pesos|COL\$/i.test(text)?'COP':(Math.max.apply(null,nums)>100000?'COP':'USD')) );
+    exResult.innerHTML='<span style="color:var(--red)">No encontré ningún número.</span>';return;}
+  var cur=curSel!=='auto'?curSel:(/US\$|\bUSD\b|d[oó]lar/i.test(text)?'USD':(/\bCOP\b|pesos|COL\$/i.test(text)?'COP':(Math.max.apply(null,nums)>100000?'COP':'USD')));
   var cand=nums.filter(function(n){return cur==='COP'?(n>=1e6&&n<=1e8):(n>=200&&n<=30000);});
   if(!cand.length)cand=nums;
   var val=Math.max.apply(null,cand);
   var totalUsd=cur==='COP'?val/TRM:val;
   var usd_pp=Math.round(scope==='pp'?totalUsd:totalUsd/2);
   var curTxt=cur==='COP'?('COP '+val.toLocaleString()):('USD '+val.toLocaleString());
-  var scopeTxt=scope==='pp'?'por persona':'total pareja';
   exResult.className='show';
-  exResult.innerHTML='<div class="line1">Detectado <b>'+curTxt+'</b> ('+scopeTxt+')'+(cur==='COP'?' · TRM '+TRM.toLocaleString():'')+'</div>'+
-    '<div class="exconfirm">USD por persona <input id="ex-pp" type="number" value="'+usd_pp+'"> '+
-    '<span id="ex-verd" class="vchip"></span> · fuente <input id="ex-src" value="'+ruta+'"> '+
-    '<button class="btn" id="ex-add">Agregar a bitácora</button></div>'+
-    '<div style="font-size:11.5px;color:var(--muted);margin-top:6px">¿Número equivocado? Corrige el USD por persona antes de agregar.</div>';
+  exResult.innerHTML='<div style="margin-bottom:8px">Detectado <b>'+curTxt+'</b> ('+(scope==='pp'?'pp':'pareja')+')'+(cur==='COP'?' · TRM '+TRM.toLocaleString():'')+'</div>'+
+    '<div class="exconfirm">USD pp <input id="ex-pp" type="number" value="'+usd_pp+'" style="width:100px"> '+
+    '<span id="ex-verd" class="vchip"></span> fuente <input id="ex-src" value="'+ruta+'" style="width:100px"> '+
+    '<button class="btn" id="ex-add">Agregar</button></div>';
   var pp=document.getElementById('ex-pp'),verd=document.getElementById('ex-verd');
   function upd(){var v=verdictOf(Math.round(+pp.value||0));verd.className='vchip '+v.c;verd.textContent=v.k;}
   pp.addEventListener('input',upd);upd();
   document.getElementById('ex-add').addEventListener('click',function(){
-    var p=Math.round(+pp.value||0); if(!p) return;
+    var p=Math.round(+pp.value||0);if(!p)return;
     var d=new Date(),today=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
     LOG.push({fecha:today,ruta:ruta,usd_pp:p,veredicto:verdictOf(p).k,fuente:(document.getElementById('ex-src').value||'extractor'),nota:''});
-    refresh();
-    exResult.className='';exResult.innerHTML='';
+    refresh();exResult.className='';exResult.innerHTML='';
     document.getElementById('ex-paste').value='';
-    document.getElementById('msg').textContent='Agregado: '+p.toLocaleString()+' USD pp · '+verdictOf(p).k+'.';
+    document.getElementById('msg').textContent=p.toLocaleString()+' USD pp · '+verdictOf(p).k;
   });
 });
 
 document.getElementById('clear').addEventListener('click',function(){
-  if(confirm('¿Borrar todos los registros de la bitácora?')){LOG=[];refresh();document.getElementById('msg').textContent='Bitácora vacía.';}
+  if(confirm('¿Borrar todos los registros?')){LOG=[];refresh();document.getElementById('msg').textContent='Bitácora vacía.';}
 });
 document.getElementById('export').addEventListener('click',function(){
   var head='fecha,ruta,precio,moneda,usd_pp,veredicto,fuente,nota\n';
-  var body=LOG.map(function(r){return [r.fecha,r.ruta,r.usd_pp,'USD',r.usd_pp,r.veredicto,r.fuente,r.nota].join(',');}).join('\n');
+  var body=LOG.map(function(r){return[r.fecha,r.ruta,r.usd_pp,'USD',r.usd_pp,r.veredicto,r.fuente,r.nota].join(',');}).join('\n');
   var blob=new Blob([head+body],{type:'text/csv'});
   var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='bitacora-japon-2027.csv';a.click();
 });
 
-/* ---------- HAND-DRAWN SVG CHART ---------- */
+/* ─── CHART ─── */
 function drawChart(){
   var svg=document.getElementById('chart');
-  var W=780,H=300,padL=52,padR=64,padT=20,padB=32;
-  var plotW=W-padL-padR, plotH=H-padT-padB;
-  function ns(tag,attrs){var e=document.createElementNS('http://www.w3.org/2000/svg',tag);
-    for(var k in attrs)e.setAttribute(k,attrs[k]);return e;}
+  var W=780,H=300,pL=52,pR=64,pT=20,pB=32;
+  var plotW=W-pL-pR,plotH=H-pT-pB;
+  var cs=getComputedStyle(document.documentElement);
+  var gridC=cs.getPropertyValue('--border').trim();
+  var textC=cs.getPropertyValue('--text-3').trim();
+  var lineC=cs.getPropertyValue('--text-2').trim();
+  function ns(tag,a){var e=document.createElementNS('http://www.w3.org/2000/svg',tag);for(var k in a)e.setAttribute(k,a[k]);return e;}
+  function txt(x,y,s,fill,sz,anc){var e=ns('text',{x:x,y:y,fill:fill||textC,'font-size':sz||10,'text-anchor':anc||'start','font-family':'inherit'});e.textContent=s;return e;}
   svg.innerHTML='';
-  if(LOG.length===0){
-    svg.appendChild(txt(W/2,H/2,'Sin registros. Pega el primero y la curva aparece.','#6c665e',13,'middle'));
-    return;
-  }
+  if(!LOG.length){svg.appendChild(txt(W/2,H/2,'Sin registros.',textC,13,'middle'));return;}
   var pps=LOG.map(function(r){return r.usd_pp;});
-  var dmin=Math.min.apply(null,pps), dmax=Math.max.apply(null,pps);
-  var yMin=Math.min(1250,dmin-50), yMax=Math.max(1750,dmax+50);
-  yMin=Math.floor(yMin/50)*50; yMax=Math.ceil(yMax/50)*50;
-  function Y(v){return padT+plotH-(v-yMin)/(yMax-yMin)*plotH;}
-  function X(i){return LOG.length===1?padL+plotW/2:padL+i/(LOG.length-1)*plotW;}
-
-  // background bands: buy zone (<=1300) and split zone (>=1700)
-  if(1300>yMin){var by=Y(1300);svg.appendChild(ns('rect',{x:padL,y:by,width:plotW,height:(padT+plotH-by),fill:'#63B77C',opacity:.07}));}
-  if(1700<yMax){var sy=Y(1700);svg.appendChild(ns('rect',{x:padL,y:padT,width:plotW,height:(sy-padT),fill:'#D8442E',opacity:.07}));}
-
-  // Y axis grid (5 marks)
+  var dmin=Math.min.apply(null,pps),dmax=Math.max.apply(null,pps);
+  var yMin=Math.min(1250,dmin-50),yMax=Math.max(1750,dmax+50);
+  yMin=Math.floor(yMin/50)*50;yMax=Math.ceil(yMax/50)*50;
+  function Y(v){return pT+plotH-(v-yMin)/(yMax-yMin)*plotH;}
+  function X(i){return LOG.length===1?pL+plotW/2:pL+i/(LOG.length-1)*plotW;}
+  if(1300>yMin){svg.appendChild(ns('rect',{x:pL,y:Y(1300),width:plotW,height:(pT+plotH-Y(1300)),fill:'#63B77C',opacity:.06}));}
+  if(1700<yMax){svg.appendChild(ns('rect',{x:pL,y:pT,width:plotW,height:(Y(1700)-pT),fill:'#D8442E',opacity:.06}));}
   for(var g=0;g<5;g++){
-    var val=yMin+(yMax-yMin)*g/4, yy=Y(val);
-    svg.appendChild(ns('line',{x1:padL,y1:yy,x2:padL+plotW,y2:yy,stroke:'#eee',"stroke-width":1}));
-    svg.appendChild(txt(padL-8,yy+4,Math.round(val).toLocaleString(),'#9a948b',10,'end'));
+    var val=yMin+(yMax-yMin)*g/4,yy=Y(val);
+    svg.appendChild(ns('line',{x1:pL,y1:yy,x2:pL+plotW,y2:yy,stroke:gridC,'stroke-width':1}));
+    svg.appendChild(txt(pL-8,yy+4,Math.round(val).toLocaleString(),textC,10,'end'));
   }
-  // trigger lines
   [[1300,'#63B77C','1.300'],[1500,'#2FA6A0','1.500'],[1700,'#D8442E','1.700']].forEach(function(t){
     if(t[0]>=yMin&&t[0]<=yMax){var yy=Y(t[0]);
-      svg.appendChild(ns('line',{x1:padL,y1:yy,x2:padL+plotW,y2:yy,stroke:t[1],"stroke-width":1.4,"stroke-dasharray":'5 4'}));
-      svg.appendChild(txt(padL+plotW+6,yy+4,t[2],t[1],10.5,'start'));
+      svg.appendChild(ns('line',{x1:pL,y1:yy,x2:pL+plotW,y2:yy,stroke:t[1],'stroke-width':1.2,'stroke-dasharray':'4 3'}));
+      svg.appendChild(txt(pL+plotW+6,yy+4,t[2],t[1],10,'start'));
     }
   });
-  // white connecting line
   if(LOG.length>1){
     var d='';LOG.forEach(function(r,i){d+=(i?'L':'M')+X(i).toFixed(1)+' '+Y(r.usd_pp).toFixed(1)+' ';});
-    svg.appendChild(ns('path',{d:d,fill:'none',stroke:'#ffffff',"stroke-width":3,"stroke-linejoin":'round',"stroke-linecap":'round',filter:''}));
-    svg.appendChild(ns('path',{d:d,fill:'none',stroke:'#c9c2b6',"stroke-width":1,"stroke-linejoin":'round'}));
+    svg.appendChild(ns('path',{d:d,fill:'none',stroke:lineC,'stroke-width':1.5,'stroke-linejoin':'round'}));
   }
-  // points
   LOG.forEach(function(r,i){
     var v=verdictOf(r.usd_pp);
-    var c=ns('circle',{cx:X(i),cy:Y(r.usd_pp),r:5,fill:v.col,stroke:'#fff',"stroke-width":1.5});
+    var c=ns('circle',{cx:X(i),cy:Y(r.usd_pp),r:4.5,fill:v.col,stroke:cs.getPropertyValue('--surface').trim(),'stroke-width':1.5});
     c.appendChild(ns('title',{}));c.querySelector('title').textContent=r.fecha+' · '+r.usd_pp+' USD pp · '+r.veredicto;
     svg.appendChild(c);
   });
-  // X labels: first & last
-  svg.appendChild(txt(X(0),H-10,LOG[0].fecha,'#9a948b',10,LOG.length===1?'middle':'start'));
-  if(LOG.length>1) svg.appendChild(txt(X(LOG.length-1),H-10,LOG[LOG.length-1].fecha,'#9a948b',10,'end'));
-
-  if(LOG.length===1){
-    svg.appendChild(txt(W/2,padT+14,'Un registro. Con dos o más aparece la curva.','#9a948b',11,'middle'));
-  }
-  function txt(x,y,s,fill,size,anchor){return ns('text',{x:x,y:y,fill:fill,"font-size":size,"text-anchor":anchor,"font-family":'inherit'}).appendChild(document.createTextNode(s)).parentNode;}
+  svg.appendChild(txt(X(0),H-10,LOG[0].fecha,textC,10,LOG.length===1?'middle':'start'));
+  if(LOG.length>1)svg.appendChild(txt(X(LOG.length-1),H-10,LOG[LOG.length-1].fecha,textC,10,'end'));
 }
 
-/* ---------- TAB 8: CHECKLIST ---------- */
+/* ─── CHECKLIST ─── */
 var CHK=[
  ['Fondo separado','Cuenta aparte para el viaje','jul 2026'],
  ['Sistema de vigilancia','Bitácora y links activos','jul 2026'],
  ['Aporte de ella','Segundo aporte mensual arranca','oct 2026'],
- ['Black Friday','Revisar tarifa base 2026 (condicional)','nov 2026'],
+ ['Black Friday','Revisar tarifas (condicional)','nov 2026'],
  ['Pasaportes','Vigencia y páginas en regla','mar 2027'],
+ ['eTA Canadá','Electronic Travel Authorization para tránsito','abr 2027'],
  ['Vacaciones por escrito','15 días hábiles confirmados','may 2027'],
- ['Comprar multi-city','Turkish, ~11,8M','jun 2027'],
- ['Shuttles','MDE↔BOG ambos sentidos','jul 2027'],
+ ['Comprar vuelos internacionales','Ruta vía Canadá','jun 2027'],
+ ['Shuttles MDE↔BOG','Domésticos ambos sentidos','jul 2027'],
  ['Radicar visa Japón','La fecha más importante','~1 ago 2027',true],
  ['Ryokan Hakone + hotel Kioto','Mayor demanda, reservar primero','ago 2027'],
- ['Hoteles restantes','Resto de Japón y Estambul','sep 2027'],
+ ['Hoteles restantes','Resto del alojamiento','sep 2027'],
  ['Trenes','SmartEX anticipado','sep–oct 2027'],
  ['Visit Japan Web + eSIM','Trámite migratorio online','oct 2027'],
- ['Solicitar Stopover','Con el PNR, 72h antes','17 nov 2027'],
  ['Divisas y maleta','Efectivo/tarjeta y empaque','27 oct 2027'],
  ['Despegue','¡Buen viaje!','28 oct 2027']
 ];
 var CKEY='jp2027_checklist';
-function loadChk(){try{return JSON.parse(localStorage.getItem(CKEY))||{};}catch(_){return {};}}
+function loadChk(){try{return JSON.parse(localStorage.getItem(CKEY))||{};}catch(_){return{};}}
 var CHKSTATE=loadChk();
 var ul=document.getElementById('chk');
 ul.innerHTML=CHK.map(function(x,i){
-  var on=CHKSTATE[i]?' done':'';
-  return '<li class="'+(on)+'" data-i="'+i+'"><input type="checkbox" '+(CHKSTATE[i]?'checked':'')+'>'+
+  var on=CHKSTATE[i];
+  return'<li class="'+(on?'done':'')+'" data-i="'+i+'"><input type="checkbox" '+(on?'checked':'')+'>'+
     '<div class="txt"><b>'+x[0]+'</b><div class="d">'+x[1]+'</div></div>'+
     '<span class="when'+(x[3]?' hot':'')+'">'+x[2]+'</span></li>';
 }).join('');
@@ -741,15 +769,13 @@ function updProg(){
   document.getElementById('prog').style.width=(done/CHK.length*100).toFixed(0)+'%';
 }
 ul.addEventListener('change',function(e){
-  var li=e.target.closest('li'); if(!li) return;
-  var i=li.dataset.i; CHKSTATE[i]=e.target.checked;
+  var li=e.target.closest('li');if(!li)return;
+  var i=li.dataset.i;CHKSTATE[i]=e.target.checked;
   li.classList.toggle('done',e.target.checked);
   try{localStorage.setItem(CKEY,JSON.stringify(CHKSTATE));}catch(_){}
   updProg();
 });
 updProg();
-
-/* init bitácora view */
 refresh();
 </script>
 </body>
